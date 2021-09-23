@@ -1,0 +1,26 @@
+{% load django_bootstrap5 %}
+{% with app_name='単語帳アプリ' %}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <title>{{ app_name }} -{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>{{ app_name }}</h1>
+    </header>
+    <main>
+        <div class='container'>
+            {% block main %}{% endblock %}
+        </div>
+    </main>
+</body>
+</html>
+
+{% endwith %}
