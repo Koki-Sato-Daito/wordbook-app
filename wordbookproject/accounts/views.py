@@ -1,9 +1,18 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.http import HttpResponseRedirect
+from django.http.response import HttpResponseForbidden
 
 from accounts.forms import UserCreationForm
 from django.views.generic.edit import CreateView
+
+
+def logout_required(view):
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseForbidden()
+        return view(request, *args, **kwargs)
+    return _wrapped_view
 
 
 class SignUpView(CreateView):

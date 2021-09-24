@@ -1,4 +1,8 @@
-from ..forms import UserChangeForm, UserCreationForm
+from ..forms import (
+    UserChangeForm,
+    UserCreationForm,
+    AuthenticationForm,
+)
 from ..models import User
 from django.test import TestCase
 
@@ -49,3 +53,64 @@ class UserChangeFormTests(TestCase):
         }
         form = UserChangeForm(params, instance=user)
         self.assertFalse(form.is_valid())
+
+
+class AuthenticationFormTests(TestCase):
+    def setUp(self):
+        User.objects.create_user(
+            login_id='testuser01',
+            password='testuser_pass'
+        )
+
+    def test_can_authorize_user_when_precise_inputs(self):
+        form = AuthenticationForm(data={
+            'login_id': 'testuser01',
+            'password': 'testuser_pass',
+        })
+        self.assertTrue(form.is_valid())
+
+    def test_should_raise_error_when_loginid_is_empty(self):
+        form = AuthenticationForm(data={
+            'login_id': '',
+            'password': 'testuser_pass',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertRegex(str(form['login_id'].errors), 'このフィールドは必須です')
+
+    def test_should_raise_error_when_password_is_empty(self):
+        form = AuthenticationForm(data={
+            'login_id': 'testuser01',
+            'password': '',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertRegex(str(form['password'].errors), 'このフィールドは必須です')
+
+    def test_should_raise_error_when_user_does_not_exist(self):
+        form = AuthenticationForm(data={
+            'login_id': 'not_exist_user',
+            'password': 'testuser_pass',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.non_field_errors()[0],
+                         form.error_messages['invalid_login'])
+
+    def test_should_raise_error_when_wrong_password(self):
+        form = AuthenticationForm(data={
+            'login_id': 'testuser01',
+            'password': 'wrong_password',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.non_field_errors()[0],
+                         form.error_messages['invalid_login'])
+
+    def test_should_raise_error_when_found_user_is_inactive(self):
+        user = User.objects.get(login_id='testuser01')
+        form = AuthenticationForm(data={
+            'login_id': 'testuser01',
+            'password': 'testuser_pass',
+        })
+        user.is_active = False
+        user.save()
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.non_field_errors()[0],
+                         form.error_messages['inactive'])
