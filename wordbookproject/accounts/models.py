@@ -72,3 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def clean(self):
         super().clean()
+
+    @property
+    def is_superuser(self):
+        return self.is_admin
