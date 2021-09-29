@@ -21,7 +21,7 @@ class SignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
+        login(self.request, user, backend='accounts.backends.CustomBackend')
         messages.add_message(self.request, messages.SUCCESS,
                              'ユーザー登録に成功しました')
         return HttpResponseRedirect('/')
