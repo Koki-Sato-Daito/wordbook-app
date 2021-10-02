@@ -1,7 +1,57 @@
 {% extends 'base.html' %}
-
 {% block title %}TOP{% endblock %}
 
 {% block main %}
-<h2>Welocom to 単語帳アプリケーション!!</h2>
+<div id="top">
+    <div class="mt-4">
+        <b-carousel
+        id="carousel-fade"
+        style="text-shadow: 0px 0px 2px #000"
+        fade
+        indicators
+        img-width="1024"
+        img-height="480"
+        >
+            <b-carousel-slide
+            caption="First slide"
+            img-src="https://picsum.photos/1024/480/?image=10"
+            ></b-carousel-slide>
+            <b-carousel-slide
+            caption="Second Slide"
+            img-src="https://picsum.photos/1024/480/?image=12"
+            ></b-carousel-slide>
+            <b-carousel-slide
+            caption="Third Slide"
+            img-src="https://picsum.photos/1024/480/?image=22"
+            ></b-carousel-slide>
+        </b-carousel>
+    </div>
+
+    <h2 class="mt-3">Welocom to {{ app_name }}</h2>
+    <p class="mt-4">プログラミング言語の公式ドキュメントにおいて出現した単語を独自に集計し、
+        単語帳を作成いたしました。</p>
+    <p>間違えた問題のみのチェックリスト機能がございますので、
+        苦手にフォーカスした効率的な学習が体験できます。</p>
+    <p>英語が苦手な方はもちろん、
+        各プログラミング言語の公式ページでどんな英単語が頻出するのかということがわかるため、
+        そういった知的好奇心を満たせるという点で楽しめると思います。</p>
+    <p>※出現回数の多い英単語をまとめた単語帳でありますので、非常に平易と感じますが、
+        相当な英単語を理解していることを認識していただき、自信につながれば幸いです。
+    </p>
+    <p>現在、
+        <ul>
+            <li>Python(https://www.python.org/)</li>
+        </ul>
+        に対応しております。</p>
+
+    <b-button class="mt-3" variant="outline-primary" to="{% url 'login' %}">学習を始める</b-button>
+</div>
+
+<script>
+    var top = new Vue({
+        el: '#top',
+    })
+ </script>
+
 {% endblock %}
+

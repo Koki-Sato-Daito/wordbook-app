@@ -1,25 +1,61 @@
-{% load django_bootstrap5 %}
 {% with app_name='単語帳アプリ' %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Load required Bootstrap and BootstrapVue CSS -->
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
+    <!-- Load polyfills to support older browsers -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+
+    <!-- Load Vue followed by BootstrapVue -->
+    <script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <!-- Load the following for BootstrapVueIcons support -->
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+
     <title>{{ app_name }} -{% block title %}{% endblock %}</title>
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <header>
-        <h1>{{ app_name }}</h1>
-    </header>
-    <main>
-        <div class='container'>
-            {% block main %}{% endblock %}
-        </div>
-    </main>
+<header id="header">
+    <b-navbar toggleable="md" type="dark" variant="info" class="px-3">
+        <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
+
+        <b-navbar-brand>{{ app_name }}</b-navbar-brand>
+
+        <b-collapse id="nav-text-collapse" is-nav>
+        <b-navbar-nav>
+            {% if user.is_authenticated %}
+                <b-nav-text class='mx-3'>{{ user.get_username }} さん</b-nav-text>
+                <b-nav-text><a href="{% url 'logout' %}">ログアウト</a></b-nav-text>
+            {% else %}
+                <b-nav-text class='mx-3'><a href="{% url 'signup' %}">サインアップ</a></b-nav-text>
+                <b-nav-text><a href="{% url 'login' %}">ログイン</a></b-nav-text>
+            {% endif %}
+        </b-navbar-nav>
+        </b-collapse>
+    </b-navbar>
+</header>
+<main>
+    <div class='container'>
+        {% block main %}{% endblock %}
+    </div>
+</main>
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#header',
+    })
+</script>
 </body>
 </html>
 
