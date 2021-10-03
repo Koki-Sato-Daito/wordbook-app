@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}言語選択{% endblock %}
+
+{% block main %}
+
+<div id='language' class="pt-5">
+    <p>言語を選択してください</p>
+    <select-language item="Python"
+    imgurl="{% static 'img/python-logo-master-v3-TM.png' %}"
+    official="https://www.python.org/"></select-language>
+</div>
+
+<script>
+var selectLanguage = {
+    props: ['item', 'imgurl', 'official'],
+    template:  '<div><b-card v-bind:title="item" v-bind:img-src="imgurl" img-alt="Image"' +
+                'img-top tag="article" style="max-width: 30rem;" class="my-2 py-3">' +
+                '<b-button href="#" variant="link" class="m-2">名詞</b-button>' +
+                '<b-button href="#" variant="link" class="m-2">動詞</b-button>' + 
+                '<b-button href="#" variant="link" class="m-2">形容詞</b-button>' + 
+                '<b-button href="#" variant="link" class="m-2">形容動詞</b-button>' + 
+                '<b-card-text class="mt-5"><a v-bind:href="official">公式ページリンク</a></b-card-text>' +
+                '</b-card></div>'
+}
+
+new Vue({
+    el: '#language',
+    components: {
+        "select-language": selectLanguage
+    },
+})
+
+</script>
+
+{% endblock %}

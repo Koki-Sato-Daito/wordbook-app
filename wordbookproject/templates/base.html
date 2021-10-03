@@ -22,6 +22,14 @@
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
     <title>{{ app_name }} -{% block title %}{% endblock %}</title>
+
+    <script>
+        // 開発用の設定
+        Vue.config.devtools = true;
+        // DTlと重複したマスタッシュを一括で変更する
+        Vue.mixin({ delimiters: ["${", "}"] });
+    </script>
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>
