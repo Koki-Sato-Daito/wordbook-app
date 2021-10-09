@@ -3,6 +3,72 @@
 {% block title %}学習ページ{% endblock %}
 
 {% block main %}
-    {{ language }}
-    {{ pos_param }}
+<div id="wordbook">
+    <p class="mb-5">{{ language }} / {{ pos_param }}</p>
+    <div v-if="words.length > 0" 
+         class="text-center border border-secondary rounded py-5">
+
+        <div class="mt-3 mb-5">
+            <span>出現回数: ${ words[index].python_freq }</span>
+            <h2>${ words[index].wordname }</h2>
+        </div>
+        <div v-if="isRevealed">
+            <h1 class="text-danger">${ words[index].meaning }</h1>
+            <div class="mt-5">
+                <b-form-checkbox
+                    id="checkbox-1"
+                    v-model="status"
+                    name="checkbox-1"
+                    value="accepted"
+                    unchecked-value="not_accepted"
+                    >  正解した！！</b-form-checkbox>
+                <b-button variant="link"
+                    v-on:click="moveOntoNextWord">NEXT</b-button>
+            </div>
+        </div>
+        <div v-else>
+            <b-button variant="outline-primary"
+                      v-on:click="toggleIsRevealed">答えを見る</b-button>
+        </div>
+        
+    </div>
+    <div v-else class="text-center">
+        <b-spinner></b-spinner>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+var wordbook = new Vue({
+    el: '#wordbook',
+    data: {
+        words: [],
+        index: 0,
+        isRevealed: false,
+    },
+    delimiters: ["${", "}"],
+    mounted(){
+        const vm = this;
+        const fetchUrl = "{% url 'vocabulary_data' language pos_param %}";
+        axios.get(fetchUrl).then(function(response) {
+            vm.words = response.data.data
+            vm.words.splice()
+        }).catch(function(e){
+            console.log(e)
+        })
+    },
+    methods: {
+        toggleIsRevealed: function() {
+            this.isRevealed = !this.isRevealed
+        },
+        moveOntoNextWord: function(){
+            this.toggleIsRevealed();
+            this.index++;
+            if(this.index > this.words.length){
+                alert('終了！');
+            }
+        }
+    }
+})
+</script>
 {% endblock %}
