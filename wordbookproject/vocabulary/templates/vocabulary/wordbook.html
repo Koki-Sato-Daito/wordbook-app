@@ -5,12 +5,14 @@
 {% block main %}
 <div id="wordbook">
     <p class="mb-5">{{ language }} / {{ pos_param }}</p>
-    <div v-if="words.length > 0" 
-         class="text-center border border-secondary rounded py-5">
+    <div v-if="words.length > 0"
+         class="wordcard text-center border border-secondary rounded py-5 mb-5">
 
         <div class="mt-3 mb-5">
             <span>出現回数: ${ words[index].python_freq }</span>
             <h2>${ words[index].wordname }</h2>
+            <b-button variant="link"
+                    v-on:click="saveProgress">SAVE</b-button>
         </div>
         <div v-if="isRevealed">
             <h1 class="text-danger">${ words[index].meaning }</h1>
@@ -45,10 +47,18 @@ var wordbook = new Vue({
         words: [],
         index: 0,
         isRevealed: false,
+        StorageKey: 'progress-' + "{{ language }}" + "-" + "{{ pos_param }}",
     },
     delimiters: ["${", "}"],
     mounted(){
         const vm = this;
+
+        const progress = localStorage.getItem(vm.StorageKey);
+        if (progress){
+            vm.index = progress
+            localStorage.removeItem(vm.StorageKey)
+        }
+
         const fetchUrl = "{% url 'vocabulary_data' language pos_param %}";
         axios.get(fetchUrl).then(function(response) {
             vm.words = response.data.data
@@ -66,7 +76,13 @@ var wordbook = new Vue({
             this.index++;
             if(this.index > this.words.length){
                 alert('終了！');
+                window.location.href = "{% url 'languages' %}"
             }
+        },
+        saveProgress: function() {
+            localStorage.removeItem(this.StorageKey);
+            localStorage.setItem(this.StorageKey, this.index);
+            window.location.href = "{% url 'languages' %}"
         }
     }
 })
