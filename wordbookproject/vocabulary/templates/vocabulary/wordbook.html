@@ -2,6 +2,17 @@
 {% load static %}
 {% block title %}学習ページ{% endblock %}
 
+{% block extra_css %}
+<style>
+.wordcard {
+    background-image: url('/static/img/original.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 70vh;
+}
+</style>
+{% endblock %}
+
 {% block main %}
 <div id="wordbook">
     <p class="mb-5">{{ language }} / {{ pos_param }}</p>
@@ -18,12 +29,8 @@
             <h1 class="text-danger">${ words[index].meaning }</h1>
             <div class="mt-5">
                 <b-form-checkbox
-                    id="checkbox-1"
-                    v-model="status"
-                    name="checkbox-1"
-                    value="accepted"
-                    unchecked-value="not_accepted"
-                    >  正解した！！</b-form-checkbox>
+                    v-model="correct">
+                        正解した！！</b-form-checkbox>
                 <b-button variant="link"
                     v-on:click="moveOntoNextWord">NEXT</b-button>
             </div>
@@ -47,19 +54,20 @@ var wordbook = new Vue({
         words: [],
         index: 0,
         isRevealed: false,
-        StorageKey: 'progress-' + "{{ language }}" + "-" + "{{ pos_param }}",
+        correct: false,
+        mistakenWords: []
     },
     delimiters: ["${", "}"],
     mounted(){
         const vm = this;
 
-        const progress = localStorage.getItem(vm.StorageKey);
+        const progress = localStorage.getItem(vm.getStorageKey);
         if (progress){
             vm.index = progress
-            localStorage.removeItem(vm.StorageKey)
+            localStorage.removeItem(vm.getStorageKey)
         }
 
-        const fetchUrl = "{% url 'vocabulary_data' language pos_param %}";
+        const fetchUrl = this.getFetchUrl;
         axios.get(fetchUrl).then(function(response) {
             vm.words = response.data.data
             vm.words.splice()
@@ -67,22 +75,69 @@ var wordbook = new Vue({
             console.log(e)
         })
     },
+    computed: {
+        getMistakeParam: function(){
+            const mistakeParam = "{{ mistake }}";
+            if (mistakeParam == "True"){
+                return true
+            }
+            return false
+        },
+        getStorageKey: function(){
+            if (this.getMistakeParam){
+                return 'progress-{{ language }}-{{ pos_param }}-mistake'
+            }else{
+                return 'progress-{{ language }}-{{ pos_param }}'
+            }
+        },
+        getFetchUrl: function() {
+            if (this.getMistakeParam){
+                return "{% url 'vocabulary_data' language pos_param %}?mistake=True"
+            }else{
+                return "{% url 'vocabulary_data' language pos_param %}"
+            }
+        }
+    },
     methods: {
         toggleIsRevealed: function() {
             this.isRevealed = !this.isRevealed
         },
+        resetCorrect: function() {
+            this.correct = false
+        },
         moveOntoNextWord: function(){
+            if (!this.correct){
+                this.saveMistakenWords();
+            }
             this.toggleIsRevealed();
+            this.resetCorrect();
             this.index++;
-            if(this.index > this.words.length){
+            if (this.index >= this.words.length){
+                this.postMistakenWords();
                 alert('終了！');
-                window.location.href = "{% url 'languages' %}"
+                window.location.href = "{% url 'languages' %}";
             }
         },
         saveProgress: function() {
-            localStorage.removeItem(this.StorageKey);
-            localStorage.setItem(this.StorageKey, this.index);
-            window.location.href = "{% url 'languages' %}"
+            localStorage.removeItem(this.getStorageKey);
+            localStorage.setItem(this.getStorageKey, this.index);
+            this.postMistakenWords();
+            window.location.href = "{% url 'languages' %}";
+        },
+        saveMistakenWords: function() {
+            this.mistakenWords.push(this.words[this.index].id);
+        },
+        postMistakenWords: function() {
+            const vm = this
+            const postUrl = "{% url 'mistake' %}";
+            const data = JSON.stringify({'words': vm.mistakenWords});
+            axios.defaults.xsrfCookieName = 'csrftoken';
+            axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+            axios.post(postUrl, data).then(function(response) {
+                console.log(response)
+            }).catch(function(e){
+                console.log(e)
+            })
         }
     }
 })

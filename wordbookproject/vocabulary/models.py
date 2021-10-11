@@ -6,8 +6,7 @@ class Vocabulary(models.Model):
     meaning = models.CharField('意味', max_length=128, null=False)
     pos = models.CharField('品詞', max_length=128, null=False)
     python_freq = models.IntegerField('出現回数(python)', null=False, blank=True)
-    mistake_user = models.ManyToManyField(User, related_name='users',
-                                          related_query_name='user')
+    mistake_users = models.ManyToManyField(User, related_name='mistake_words')
 
     class Meta:
         db_table = 'vocabulary'
