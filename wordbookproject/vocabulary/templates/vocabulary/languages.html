@@ -6,6 +6,8 @@
 <style>
 .card {
     border: 0.5px solid black;
+    background: linear-gradient(#dfdfdf 1px, transparent 1px) #fffbf2;
+    background-size: auto 2em;
 }
 </style>
 {% endblock %}
@@ -30,7 +32,7 @@ var selectLanguage = {
     delimiters: ["${", "}"],
     template:  '<div class="col-lg-6">' +
                     '<b-card :title="item.name" :img-src="item.imgUrl" img-alt="Image"' +
-                        'img-top tag="article" style="max-width: 30rem;" class="my-2 py-3">' +
+                        'img-top tag="article" style="max-width: 30rem;" class="my-3 py-4">' +
                         '<div v-for="(wordbookUrl, pos) in item.wordbookUrls">' +
                             '<b-button :href="wordbookUrl" variant="link">${ pos }</b-button>' +
                             '<b-button :href="getMistakeParamUrl(wordbookUrl)" variant="link">間違った: ${ pos }</b-button>' +
