@@ -24,7 +24,7 @@ class SignUpView(CreateView):
         login(self.request, user, backend='accounts.backends.CustomBackend')
         messages.add_message(self.request, messages.SUCCESS,
                              'ユーザー登録に成功しました')
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/vocabulary/languages')
 
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR,

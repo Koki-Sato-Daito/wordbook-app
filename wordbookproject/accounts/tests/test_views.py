@@ -19,13 +19,13 @@ class SignUpViewTests(TestCase):
         })
         self.assertEqual(User.objects.get().login_id, 'testuser')
 
-    def test_should_redirect_top_if_sending_user_data(self):
+    def test_should_redirect_languages_page_if_sending_user_data(self):
         response = self.client.post('/accounts/signup/', {
             'login_id': 'testuser',
             'password1': 'test_pass',
             'password2': 'test_pass',
         })
-        self.assertRedirects(response, '/')
+        self.assertRedirects(response, '/vocabulary/languages')
 
     def test_should_keep_login_when_user_create_request(self):
         response = self.client.post('/accounts/signup/', {
@@ -80,4 +80,4 @@ class LoginViewTests(TestCase):
     def test_httpredirect_when_already_logined(self):
         self.client.login(login_id='testuser', password='testuser_pass')
         response = self.client.get('/accounts/login/')
-        self.assertRedirects(response, '/')
+        self.assertRedirects(response, '/vocabulary/languages')

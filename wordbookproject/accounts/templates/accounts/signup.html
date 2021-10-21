@@ -2,12 +2,25 @@
 {% load django_bootstrap5 %}
 {% block title %}サインアップページ{% endblock %}
 
+{% block extra_css %}
+<style>
+    .signup-form {
+        background: white;
+        padding: 40px;
+        margin-top: 40px;
+        border: solid 0.5px black;
+    }
+</style>
+{% endblock %}
 
 {% block main %}
-<form method='post'>
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% bootstrap_button button_type='submit' content='登録'%}
-</form>
+<div class="signup-form">
+    <h2 class="mb-4"">サインアップ</h2>
+    <form method='post'>
+        {% csrf_token %}
+        {% bootstrap_form form layout="horizontal" %}
+        {% bootstrap_button button_type='submit' content='登録'%}
+    </form>
+</div>
 
 {% endblock %}

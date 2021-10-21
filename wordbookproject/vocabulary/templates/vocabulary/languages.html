@@ -2,14 +2,24 @@
 {% load static %}
 {% block title %}言語選択{% endblock %}
 
+{% block extra_css %}
+<style>
+.card {
+    border: 0.5px solid black;
+}
+</style>
+{% endblock %}
+
 {% block main %}
 
 <div id='language' class="pt-5">
-    <p>言語を選択してください</p>
-    <select-language 
+    <h4>学習する言語と品詞を選択してください</h4>
+    <div class="row">
+        <select-language 
         v-for="item in items"
         :key="item.id"
         :item="item" />
+    </div>
 </div>
 
 <script>
@@ -18,7 +28,7 @@ var selectLanguage = {
         item: Object
     },
     delimiters: ["${", "}"],
-    template:  '<div>' +
+    template:  '<div class="col-lg-6">' +
                     '<b-card :title="item.name" :img-src="item.imgUrl" img-alt="Image"' +
                         'img-top tag="article" style="max-width: 30rem;" class="my-2 py-3">' +
                         '<div v-for="(wordbookUrl, pos) in item.wordbookUrls">' +

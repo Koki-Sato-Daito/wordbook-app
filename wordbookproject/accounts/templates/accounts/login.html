@@ -3,12 +3,24 @@
 
 {% block title %}ログイン{% endblock %}
 
+{% block extra_css %}
+<style>
+.login-form {
+    background: white;
+    padding: 40px;
+    margin-top: 40px;
+    border: solid 0.5px black;
+}
+</style>
+{% endblock %}
+
 {% block main %}
-<h2>ログイン</h2>
-<form method='post'>
-    {% csrf_token %}
-    <input type='hidden' name='text' value='{{ next }}'>
-    {% bootstrap_form form %}
-    {% bootstrap_button button_type='submit' content='ログイン' %}
-</form>
+<div class="login-form">
+    <h2 class="mb-5">ログイン</h2>
+    <form method='post'>
+        {% csrf_token %}
+        {% bootstrap_form form　layout="horizontal" %}
+        {% bootstrap_button button_type='submit' content='ログイン' %}
+    </form>
+</div>
 {% endblock %}
