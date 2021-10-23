@@ -13,7 +13,7 @@ def forbid_invalid_params(view):
     def _wrapped_view(request, *args, **kwargs):
         if not kwargs['language'] in ['python']:
             return HttpResponseForbidden()
-        if not kwargs['pos_param'] in ['noun', 'verb', 'adjective', 'adverb']:
+        if not kwargs['pos'] in ['noun', 'verb', 'adjective', 'adverb']:
             return HttpResponseForbidden()
         return view(request, *args, **kwargs)
     return _wrapped_view
@@ -24,9 +24,10 @@ def return_words(request):
     return render(request, 'vocabulary/words.html', context)
 
 @forbid_invalid_params
-def return_filtered_words(request, language, pos_param):
-    if language == 'python':
-        words = Vocabulary.objects.filter(pos=pos_param, python_freq__gt=0).order_by("-python_freq")
+def return_filtered_words(request, language, pos):
+    words = Vocabulary.objects.filter(pos=pos,
+                                      language=language,
+                                      freq__gt=0).order_by("-freq")
 
     if request.GET.get('mistake') == "True":
         words = words.filter(mistake_users=request.user)
@@ -35,10 +36,10 @@ def return_filtered_words(request, language, pos_param):
     return JsonResponse({'data': data})
 
 @forbid_invalid_params
-def return_wordbook_page(request, language, pos_param):
+def return_wordbook_page(request, language, pos):
     context = {
         'language': language,
-        'pos_param': pos_param,
+        'pos': pos,
         'mistake': request.GET.get('mistake')
     }
     return render(request, 'vocabulary/wordbook.html', context)

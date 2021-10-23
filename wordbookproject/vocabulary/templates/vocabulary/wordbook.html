@@ -30,11 +30,11 @@
 
 {% block main %}
 <div id="wordbook">
-    <p class="mt-3 mb-5">{{ language }} / {{ pos_param }}</p>
+    <p class="mt-3 mb-5">{{ language }} / {{ pos }}</p>
     <div class="wordcard">
         <div v-if="words.length > 0" class="text-center py-5 mb-5">
             <div class="mt-3 mb-5">
-                <span>出現回数: ${ words[index].python_freq }</span>
+                <span>出現回数: ${ words[index].freq }</span>
             </div>
             <h2>${ words[index].wordname }</h2>
             <div v-if="isRevealed">
@@ -99,16 +99,16 @@ var wordbook = new Vue({
         },
         getStorageKey: function(){
             if (this.getMistakeParam){
-                return 'progress-{{ language }}-{{ pos_param }}-mistake'
+                return 'progress-{{ language }}-{{ pos }}-mistake'
             }else{
-                return 'progress-{{ language }}-{{ pos_param }}'
+                return 'progress-{{ language }}-{{ pos }}'
             }
         },
         getFetchUrl: function() {
             if (this.getMistakeParam){
-                return "{% url 'vocabulary_data' language pos_param %}?mistake=True"
+                return "{% url 'vocabulary_data' language pos %}?mistake=True"
             }else{
-                return "{% url 'vocabulary_data' language pos_param %}"
+                return "{% url 'vocabulary_data' language pos %}"
             }
         }
     },

@@ -7,9 +7,12 @@ from .models import Vocabulary
 
 class FilteredWordsViewFuncTests(TestCase):
     def setUp(self):
-        Vocabulary.objects.create(wordname='study', meaning='勉強する', pos='verb', python_freq=500)
-        Vocabulary.objects.create(wordname='walk', meaning='歩く', pos='verb', python_freq=0)
-        Vocabulary.objects.create(wordname='very', meaning='とても', pos='adverb', python_freq=500)
+        Vocabulary.objects.create(wordname='study',
+            meaning='勉強する', pos='verb', language='python', freq=500)
+        Vocabulary.objects.create(wordname='walk',
+            meaning='歩く', pos='verb',language='python', freq=0)
+        Vocabulary.objects.create(wordname='very',
+            meaning='とても', pos='adverb', language='python', freq=300)
 
     def test_can_return_json_correctly(self):
         response = self.client.get('/vocabulary/data/python/verb')
@@ -26,7 +29,8 @@ class FilteredWordsViewFuncTests(TestCase):
         User = get_user_model()
         testuser = User.objects.create_user(login_id='testuser', password="testuser_pass")
         self.client.login(login_id='testuser', password='testuser_pass')
-        mistake_word = Vocabulary.objects.create(wordname='move', meaning='移動する', pos='verb', python_freq=300)
+        mistake_word = Vocabulary.objects.create(wordname='move', meaning='移動する',
+                                                 pos='verb', language='python', freq=300)
         mistake_word.mistake_users.add(testuser)
 
         response = self.client.get('/vocabulary/data/python/verb?mistake=True')
@@ -43,7 +47,7 @@ class WordBookPageTests(TestCase):
     def test_should_set_context_data(self):
         response = self.client.get('/vocabulary/python/verb?mistake=True')
         self.assertEqual(response.context['language'], 'python')
-        self.assertEqual(response.context['pos_param'], 'verb')
+        self.assertEqual(response.context['pos'], 'verb')
         self.assertEqual(response.context['mistake'], 'True')
 
     def test_cannot_access_data_with_invalid_endpoint(self):
@@ -64,9 +68,12 @@ class SaveMistakenWordsTests(TestCase):
         User.objects.create_user(login_id='testuser', password="testuser_pass")
         self.client.login(login_id='testuser', password='testuser_pass')
 
-        Vocabulary.objects.create(pk=1, wordname='study', meaning='勉強する', pos='verb', python_freq=500)
-        Vocabulary.objects.create(pk=2, wordname='walk', meaning='歩く', pos='verb', python_freq=200)
-        Vocabulary.objects.create(pk=3, wordname='move', meaning='移動する', pos='verb', python_freq=100)
+        Vocabulary.objects.create(pk=1, wordname='study', meaning='勉強する', pos='verb',
+                                  language='python', freq=500)
+        Vocabulary.objects.create(pk=2, wordname='walk', meaning='歩く', pos='verb',
+                                  language='python', freq=200)
+        Vocabulary.objects.create(pk=3, wordname='move', meaning='移動する', pos='verb',
+                                  language='python', freq=100)
     
     def test_should_return_statuscord_200(self):
         response = self.client.post('/vocabulary/mistake', 
