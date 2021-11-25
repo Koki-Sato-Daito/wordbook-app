@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'accounts.apps.AccountsConfig',
     'vocabulary.apps.VocabularyConfig',
+    'import_export',
 ]
 
 MIDDLEWARE = [
