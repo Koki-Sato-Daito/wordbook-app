@@ -5,51 +5,34 @@ from django.test import TestCase
 
 class UserModelTests(TestCase):
     def test_can_create_a_user_accurately(self):
-        User.objects.create_user(
-            login_id='testuser01',
-            password='password'
-        )
+        User.objects.create_user('testuser01', 'test@example.com', 'password')
         user = User.objects.get()
-        self.assertEqual('testuser01', user.login_id)
-        self.assertFalse(user.is_admin)
+        self.assertEqual('testuser01', user.username)
+        self.assertFalse(user.is_staff)
 
     def test_can_create_a_superuser_accurately(self):
-        User.objects.create_superuser(
-            login_id='testuser01',
-            password='password'
-        )
+        User.objects.create_superuser('testuser01', 'test@example.com', 'password')
         user = User.objects.get()
-        self.assertEqual('testuser01', user.login_id)
-        self.assertTrue(user.is_admin)
+        self.assertEqual('testuser01', user.username)
+        self.assertTrue(user.is_staff)
 
-    def test_cannot_create_users_with_too_long_login_id(self):
+    def test_cannot_create_users_with_too_long_username(self):
         with self.assertRaises(ValidationError):
-            User.objects.create_user(
-                login_id='n'*21,
-                password='password'
-            )
+            User.objects.create_user('n'*21, 'test@example.com', 'password')
 
-    def test_cannot_create_users_when_login_id_is_empty(self):
+    def test_cannot_create_user_when_username_is_empty(self):
         with self.assertRaises(ValueError):
-            User.objects.create_user(
-                login_id='',
-                password='password'
-            )
+            User.objects.create_user('', 'test@example.com', 'password')
 
-    def test_cannot_create_users_when_login_id_is_duplicated(self):
-        User.objects.create_user(
-            login_id='abc123',
-            password='password'
-        )
+    def test_cannot_create_user_when_email_is_duplicated(self):
+        User.objects.create_user('testuser01', 'test@example.com', 'password')
         with self.assertRaises(ValidationError):
-            User.objects.create_user(
-                login_id='abc123',
-                password='password'
-            )
+            User.objects.create_user('testuser02', 'test@example.com', 'password')
 
-    def test_cannot_create_users_with_loginid_including_invalid_char(self):
+    def test_cannot_create_user_with_username_including_invalid_char(self):
         with self.assertRaises(ValidationError):
-            User.objects.create_user(
-                login_id='漢字が含まれる名前',
-                password='password'
-            )
+            User.objects.create_user('(無効な記号)', 'test@example.com', 'password')
+
+    def test_cannot_create_user_with_invalid_email(self):
+        with self.assertRaises(ValidationError):
+            User.objects.create_user('testuser', 'test.example.com', 'password')

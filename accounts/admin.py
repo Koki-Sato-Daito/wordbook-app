@@ -3,30 +3,28 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 
 from .models import User
-from .forms import UserCreationForm, UserChangeForm
 
 
 class UserAdmin(BaseUserAdmin):
-    form = UserChangeForm
-    add_form = UserCreationForm
-
-    list_display = ('login_id', 'date_joined')
-
+    list_display = ('username', 'date_joined')
     list_filter = ()
 
     fieldsets = (
-        (None, {'fields': ('login_id', 'password')}),
+        (None, {'fields': ('username', 'email', 'password', 'date_joined', 'is_staff',
+         'is_active')}),
         ('Permissions', {'fields': ()}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('login_id', 'password1', 'password2')}
-        ),
+            'fields':  ('username', 'email', 'password1', 'password2', 'date_joined',
+                        'is_staff', 'is_active')}
+         ),
     )
-    ordering = ('login_id',)
+    ordering = ('date_joined',)
     filter_horizontal = ()
+
 
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
