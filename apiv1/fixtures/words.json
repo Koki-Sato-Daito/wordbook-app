@@ -1,0 +1,68 @@
+[
+    {
+        "model": "wordbook.Word",
+        "pk": 1,
+        "fields": {
+            "wordname": "apple",
+            "meaning": "りんご",
+            "pos": "noun",
+            "language": "java",
+            "freq": "1000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 2,
+        "fields": {
+            "wordname": "orange",
+            "meaning": "オレンジ",
+            "pos": "noun",
+            "language": "java",
+            "freq": "980"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 3,
+        "fields": {
+            "wordname": "banana",
+            "meaning": "バナナ",
+            "pos": "noun",
+            "language": "java",
+            "freq": "90"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 4,
+        "fields": {
+            "wordname": "apple",
+            "meaning": "りんご",
+            "pos": "noun",
+            "language": "python",
+            "freq": "100000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 5,
+        "fields": {
+            "wordname": "study",
+            "meaning": "勉強する",
+            "pos": "verb",
+            "language": "python",
+            "freq": "150"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 6,
+        "fields": {
+            "wordname": "walk",
+            "meaning": "歩く",
+            "pos": "verb",
+            "language": "python",
+            "freq": "120"
+        }
+    }
+]

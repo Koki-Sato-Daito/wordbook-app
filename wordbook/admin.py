@@ -14,10 +14,7 @@ class WordResource(resources.ModelResource):
 
 
 class WordAdmin(ImportExportModelAdmin):
-    filedsets = [
-        (None, {'fields': ['wordname', 'meaning', 'pos']}),
-        ('Language', {'fields': ['freq']},)
-    ]
+    exclude = ['mistake_users']
 
     list_display = ('wordname', 'pos', 'language')
     search_fields = ['wordname', 'meaning']

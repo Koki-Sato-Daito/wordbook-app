@@ -14,4 +14,4 @@ class Word(models.Model):
         db_table = 'words'
 
     def __str__(self):
-        return f'{self.wordname}({self.pos})'
+        return f'{self.wordname}[{self.pos}]'
