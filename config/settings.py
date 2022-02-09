@@ -28,7 +28,7 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'apiv1.apps.Apiv1Config',
-    'vocabulary.apps.VocabularyConfig',
+    'wordbook.apps.WordbookConfig',
 ]
 
 MIDDLEWARE = [

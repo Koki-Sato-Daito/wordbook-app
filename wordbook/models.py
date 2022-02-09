@@ -1,7 +1,8 @@
 from django.db import models
 from accounts.models import User
 
-class Vocabulary(models.Model):
+
+class Word(models.Model):
     wordname = models.CharField('単語', max_length=128, null=False)
     meaning = models.CharField('意味', max_length=128, null=False)
     pos = models.CharField('品詞', max_length=128, null=False)
@@ -10,7 +11,7 @@ class Vocabulary(models.Model):
     mistake_users = models.ManyToManyField(User, related_name='mistake_words')
 
     class Meta:
-        db_table = 'vocabulary'
+        db_table = 'words'
 
     def __str__(self):
-        return self.wordname
+        return f'{self.wordname}({self.pos})'
