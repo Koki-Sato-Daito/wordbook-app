@@ -1,3 +1,6 @@
+from enum import unique
+import uuid
+
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin
@@ -36,6 +39,7 @@ class AccountManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username_validator = UnicodeUsernameValidator()
     username = models.CharField(
         verbose_name='ユーザ名',

@@ -20,9 +20,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_bootstrap5',
-    'accounts.apps.AccountsConfig',
-    'vocabulary.apps.VocabularyConfig',
     'import_export',
+
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+
+    'accounts.apps.AccountsConfig',
+    'apiv1.apps.Apiv1Config',
+    'vocabulary.apps.VocabularyConfig',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +94,13 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
+
+REST_FRAMEWORK = {
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ]
+}
 
 # LOGIN_URL = '/accounts/login/'
 # LOGIN_REDIRECT_URL = '/vocabulary/languages'
