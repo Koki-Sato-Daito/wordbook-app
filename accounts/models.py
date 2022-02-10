@@ -1,4 +1,3 @@
-from enum import unique
 import uuid
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
@@ -8,6 +7,8 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+from wordbook.models import Word
 
 
 class AccountManager(BaseUserManager):
@@ -55,6 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff status'), default=True)
     is_active = models.BooleanField(_('active'), default=True)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    mistake_words = models.ManyToManyField(Word, related_name='users')
 
     objects = AccountManager()
 

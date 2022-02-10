@@ -16,7 +16,7 @@ class TestWordListAPIView(APITestCase):
     def setUpTestData(cls):
         cls.user = get_user_model().objects.get(email='test1@example.com')
         for i in range(1, 3):
-            Word.objects.get(pk=i).mistake_users.add(cls.user)
+            cls.user.mistake_words.add(Word.objects.get(pk=i).id)
 
     def test_get_words(self):
         self.client.force_authenticate(user=self.user)
@@ -48,7 +48,7 @@ class TestWordListAPIView(APITestCase):
     def test_get_words_with_parms_test1_user(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(self.TARGET_URL,
-                                   {'language': 'java', 'pos': 'noun', 'mistake_users': self.user.id})
+                                   {'language': 'java', 'pos': 'noun', 'users': self.user.id})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
         self.assertEqual(len(data), 2)

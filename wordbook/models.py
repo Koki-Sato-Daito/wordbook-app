@@ -1,5 +1,4 @@
 from django.db import models
-from accounts.models import User
 
 
 class Word(models.Model):
@@ -8,7 +7,6 @@ class Word(models.Model):
     pos = models.CharField('品詞', max_length=128, null=False)
     language = models.CharField('言語', max_length=128, null=False)
     freq = models.IntegerField('出現回数', null=False, blank=True)
-    mistake_users = models.ManyToManyField(User, related_name='mistake_words')
 
     class Meta:
         db_table = 'words'
