@@ -50,5 +50,4 @@ class TestUserMistakeSerializer(APITestCase):
             instance=self.user, data=data)
         self.assertTrue(serializer.is_valid())
         serializer.save()
-        print(self.user.mistake_words)
         self.assertEqual(len(serializer.data['words']), 1)
