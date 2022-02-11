@@ -37,17 +37,18 @@ class TestUserMistakeSerializer(APITestCase):
         cls.word = Word.objects.get(pk=1)
 
     # testing deserialize
-    def test_deserialize_users_correctly(self):
+    def test_deserialize_users_mistake_words_correctly(self):
         serializer = UserMistakeSerializer(instance=self.user)
         self.assertEqual(serializer.data['id'], str(self.user.id))
 
     # testing serialize
     def test_serialize_mistake_words_correctly(self):
         data = {
-            "mistake": [self.word.id],
+            "mistakes": [self.word.id],
         }
         serializer = UserMistakeSerializer(
             instance=self.user, data=data)
         self.assertTrue(serializer.is_valid())
         serializer.save()
+        print(self.user.mistake_words)
         self.assertEqual(len(serializer.data['words']), 1)

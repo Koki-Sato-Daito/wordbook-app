@@ -22,7 +22,7 @@ class UserMistakeSerializer(serializers.ModelSerializer):
             fields = ('id', 'wordname', 'meaning', 'pos',
                     'language', 'freq')
     
-    mistake = serializers.PrimaryKeyRelatedField(
+    mistakes = serializers.PrimaryKeyRelatedField(
         queryset=Word.objects.all(),
         source = 'mistake_words',
         many=True,
@@ -37,5 +37,5 @@ class UserMistakeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'mistake', 'words')
+        fields = ('id', 'mistakes', 'words')
         read_only_fields = ('id',)

@@ -1,9 +1,12 @@
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
-from rest_framework import generics
+from rest_framework import generics, status, views
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from wordbook.models import Word
-from .serializers import WordSerializer
+from .serializers import WordSerializer, UserMistakeSerializer
 
 
 class WordFilter(filters.FilterSet):
@@ -23,4 +26,19 @@ class WordListAPIView(generics.ListAPIView):
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = WordFilter
 
-# http://localhost:8000/api/v1/words/1/users/1 でwords-usersにレコードを作うう
+
+class MistakeWordAPIView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserMistakeSerializer
+
+    def post(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(get_user_model(), id=user_id)
+        serializer = UserMistakeSerializer(instance=user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_201_CREATED)
+
+    def delete(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(get_user_model(), id=user_id)
+        user.mistake_words.clear()
+        return Response(status=status.HTTP_204_NO_CONTENT)

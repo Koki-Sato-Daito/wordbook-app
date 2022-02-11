@@ -1,4 +1,5 @@
 import json
+from sqlite3 import paramstyle
 
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase
@@ -54,3 +55,66 @@ class TestWordListAPIView(APITestCase):
         self.assertEqual(len(data), 2)
         self.assertEqual(data[0]['wordname'], 'apple')
         self.assertEqual(data[1]['wordname'], 'orange')
+
+
+class TestMistakeWordAPIView(APITestCase):
+    fixtures = ['users.json', 'words.json']
+    TARGET_URL = ''
+    user = None
+    token = None
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = get_user_model().objects.get(email='test1@example.com')
+        cls.TARGET_URL = '/api/v1/users/{user_id}/mistake/'.format(
+            user_id=cls.user.id)
+
+    # post
+    def test_user_register_mistske_words_correctly(self):
+        self.client.force_authenticate(user=self.user)
+        params = {
+            "mistakes": {1, 2, 3}
+        }
+        response = self.client.post(
+            self.TARGET_URL, params)
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.content)
+        self.assertEqual(len(data['words']), 3)
+
+    def test_return_401_if_without_login(self):
+        params = {
+            "mistakes": {1, 2, 3}
+        }
+        response = self.client.post(
+            self.TARGET_URL, params)
+        self.assertEqual(response.status_code, 401)
+
+    def test_user_register_mistake_words_correctly(self):
+        self.client.force_authenticate(user=self.user)
+        params = {
+            "mistakes": {1, 2, 3}
+        }
+        response = self.client.post(
+            self.TARGET_URL, params)
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.content)
+        self.assertEqual(len(data['words']), 3)
+
+    def test_user_cannot_register_with_invalid_params(self):
+        self.client.force_authenticate(user=self.user)
+        params = {
+            "mistakes": {10000}
+        }
+        response = self.client.post(
+            self.TARGET_URL, params)
+        self.assertEqual(response.status_code, 400)
+
+    # delete
+    def test_user_delete_mistake_words_correctly(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete(self.TARGET_URL)
+        self.assertEqual(response.status_code, 204)
+
+    def test_return_401_if_without_login(self):
+        response = self.client.delete(self.TARGET_URL)
+        self.assertEqual(response.status_code, 401)
