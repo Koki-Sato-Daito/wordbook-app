@@ -32,8 +32,7 @@ class MistakeWordAPIView(generics.GenericAPIView):
     serializer_class = UserMistakeSerializer
 
     def post(self, request, user_id, *args, **kwargs):
-        user = get_object_or_404(get_user_model(), id=user_id)
-        serializer = UserMistakeSerializer(instance=user, data=request.data)
+        serializer = UserMistakeSerializer(data=request.data, context={'user_id': user_id})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)

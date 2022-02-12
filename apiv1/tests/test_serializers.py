@@ -34,20 +34,35 @@ class TestUserMistakeSerializer(APITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = get_user_model().objects.get(username='test1')
-        cls.word = Word.objects.get(pk=1)
+        cls.word = cls.word1 = Word.objects.get(pk=1)
+        cls.word2= Word.objects.get(pk=2)
 
     # testing deserialize
     def test_deserialize_users_mistake_words_correctly(self):
         serializer = UserMistakeSerializer(instance=self.user)
         self.assertEqual(serializer.data['id'], str(self.user.id))
 
-    # testing serialize
+    # testing create
     def test_serialize_mistake_words_correctly(self):
         data = {
             "mistakes": [self.word.id],
         }
-        serializer = UserMistakeSerializer(
-            instance=self.user, data=data)
+        serializer = UserMistakeSerializer(data=data, context={'user_id': self.user.id})
         self.assertTrue(serializer.is_valid())
         serializer.save()
         self.assertEqual(len(serializer.data['words']), 1)
+
+    def test_create_method_function_is_not_replacement_but_adding(self):
+        data = {
+            "mistakes": [self.word1.id],
+        }
+        serializer = UserMistakeSerializer(data=data, context={'user_id': self.user.id})
+        serializer.is_valid()
+        serializer.save()
+        data = {
+            "mistakes": [self.word2.id],
+        }
+        serializer = UserMistakeSerializer(data=data, context={'user_id': self.user.id})
+        serializer.is_valid()
+        serializer.save()
+        self.assertEqual(len(serializer.data['words']), 2)

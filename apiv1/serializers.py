@@ -1,4 +1,5 @@
-from dataclasses import fields
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from accounts.models import User
 from wordbook.models import Word
@@ -26,7 +27,8 @@ class UserMistakeSerializer(serializers.ModelSerializer):
         queryset=Word.objects.all(),
         source = 'mistake_words',
         many=True,
-        write_only=True
+        write_only=True,
+
     )
 
     words = WordSerializer(
@@ -39,3 +41,12 @@ class UserMistakeSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'mistakes', 'words')
         read_only_fields = ('id',)
+
+    def create(self, validated_data):
+        user_id = self.context.get('user_id')
+        user = get_object_or_404(get_user_model(), id=user_id)
+        # user = get_user_model().objects.get(id=user_id)
+        words = validated_data.get('mistake_words')
+        user.mistake_words.add(*words)
+        return user
+
