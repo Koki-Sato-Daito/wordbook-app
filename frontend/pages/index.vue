@@ -24,7 +24,7 @@
                   そのときは、相当な英単語を理解していることを認識していただき、自信につながれば幸いです。
               </li>
           </ul>
-          <b-button class="my-3" variant="outline-danger" to="{% url 'login' %}">学習を始める</b-button>
+          <b-button class="my-3" variant="outline-danger" to="/login">学習を始める</b-button>
       </div>
 
       <p>現在、

@@ -15,6 +15,12 @@ export default {
   components: {
     'select-language': selectLanguage,
   },
+  fetch({ store, redirect }) {
+    const authToken =  store.getters['authentication/authToken'];
+    if (!authToken) {
+      redirect('/')
+    }
+  },
   computed: {
     ...mapGetters({ items: 'wordbookMeta/items' }),
   },

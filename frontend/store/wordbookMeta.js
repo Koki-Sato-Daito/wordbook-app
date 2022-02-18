@@ -1,8 +1,4 @@
 const state = () => ({
-    wordbookMeta: {
-        language: '',
-        pos: ''
-    },
     items: [
         {
             id: 1,
@@ -22,35 +18,16 @@ const state = () => ({
 
 // getters
 const getters = {
-    wordbookMeta: (state, getters) => {
-        return state.wordbookMeta;
-    },
     items: (state, getters) => {
         return state.items;
-    },
-    itemsLength: (state, getters) => {
-        return state.items.length;
     },
 }
 
 // actions
-const actions = {
-    setWordbookMeta({ state, commit }, { id, pos }) {
-        const item = state.items.find(item => item.id === parseInt(id));
-        commit('pushLanguage', {item})
-        commit('pushPos', {item, pos})
-    }
-}
+const actions = {}
 
 // mutations
-const mutations = {
-    pushLanguage(state, {item}) {
-        state.wordbookMeta.language = item.language;
-    },
-    pushPos(state, {item, pos}) {
-        state.wordbookMeta.pos = String(pos);
-    }
-}
+const mutations = {}
 
 export default {
     namespaced: true,
