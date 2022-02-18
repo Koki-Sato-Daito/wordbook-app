@@ -1,12 +1,33 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
-from rest_framework import generics, status, views
+from djoser import utils
+from djoser.views import TokenCreateView
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from wordbook.models import Word
-from .serializers import WordSerializer, UserMistakeSerializer
+from . import serializers
+
+
+class TokenCreateView(TokenCreateView):
+    def _action(self, serializer):
+        token = utils.login_user(self.request, serializer.user)
+        user = serializer.user
+        user_data = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        }
+        token_serializer_class = serializers.TokenSerializer(
+            token,
+            context={'user': user_data}
+        )
+        return Response(
+            data=token_serializer_class.data,
+            status=status.HTTP_200_OK
+        )
 
 
 class WordFilter(filters.FilterSet):
@@ -21,7 +42,7 @@ class WordFilter(filters.FilterSet):
 
 class WordListAPIView(generics.ListAPIView):
     queryset = Word.objects.all()
-    serializer_class = WordSerializer
+    serializer_class = serializers.WordSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = WordFilter
@@ -29,10 +50,11 @@ class WordListAPIView(generics.ListAPIView):
 
 class MistakeWordAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = UserMistakeSerializer
+    serializer_class = serializers.UserMistakeSerializer
 
     def post(self, request, user_id, *args, **kwargs):
-        serializer = UserMistakeSerializer(data=request.data, context={'user_id': user_id})
+        serializer = serializers.UserMistakeSerializer(
+            data=request.data, context={'user_id': user_id})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)

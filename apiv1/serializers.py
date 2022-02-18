@@ -1,8 +1,18 @@
+from tokenize import Token
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from djoser.serializers import TokenSerializer
 from rest_framework import serializers
+
 from accounts.models import User
 from wordbook.models import Word
+
+
+class TokenSerializer(TokenSerializer):
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['user'] = self.context['user']
+        return response
 
 
 class WordSerializer(serializers.ModelSerializer):
@@ -21,11 +31,11 @@ class UserMistakeSerializer(serializers.ModelSerializer):
         class Meta:
             model = Word
             fields = ('id', 'wordname', 'meaning', 'pos',
-                    'language', 'freq')
-    
+                      'language', 'freq')
+
     mistakes = serializers.PrimaryKeyRelatedField(
         queryset=Word.objects.all(),
-        source = 'mistake_words',
+        source='mistake_words',
         many=True,
         write_only=True,
 
@@ -49,4 +59,3 @@ class UserMistakeSerializer(serializers.ModelSerializer):
         words = validated_data.get('mistake_words')
         user.mistake_words.add(*words)
         return user
-

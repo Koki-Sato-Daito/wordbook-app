@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'corsheaders',
 
     'accounts.apps.AccountsConfig',
     'apiv1.apps.Apiv1Config',
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -100,9 +102,9 @@ REST_FRAMEWORK = {
     ]
 }
 
-# LOGIN_URL = '/accounts/login/'
-# LOGIN_REDIRECT_URL = '/vocabulary/languages'
-# LOGOUT_REDIRECT_URL = '/'
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]
 
 LANGUAGE_CODE = 'ja'
 
