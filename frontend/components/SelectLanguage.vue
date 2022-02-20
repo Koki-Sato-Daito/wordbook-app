@@ -39,8 +39,7 @@ export default {
       this.$router.push(`wordbook/${language}/${pos}/`);
     },
     wordbookPageWithMistake(language, pos) {
-      // mistake用のフラグを作る
-      this.$router.push(`wordbook/${language}/${pos}/`);
+      this.$router.push(`wordbook/${language}/${pos}/?mistake=true`);
     },
   },
 }

@@ -14,11 +14,16 @@ const getters = {
 // actions
 const actions = {
     fetchWords({state, commit}, payload) {
+        const params = {
+            language: payload.language,
+            pos: payload.pos,
+        }
+        if (payload.userId) {
+            params.users = payload.userId;
+        }
+        console.log(params)
         return  this.$axios.get('api/v1/words/', {
-            params: {
-                language: payload.language,
-                pos: payload.pos
-            },
+            params,
             headers: {
                 "Authorization": "Token " + payload.authToken
             }

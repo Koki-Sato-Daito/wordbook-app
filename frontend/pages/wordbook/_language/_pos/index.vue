@@ -47,21 +47,25 @@ export default {
     }
   },
 
-  fetch({ store, params, redirect }) {
-    const language = params.language;
-    const pos = params.pos;
-    const authToken = store.getters['authentication/authToken'];
+  fetch({ store, params, query, redirect }) {
+    const language = params.language
+    const pos = params.pos
+
+    // loginしていなかったらloginにリダイレクト
+    const authToken = store.getters['authentication/authToken']
     if (!authToken) {
-      redirect('/login');
+      redirect('/login')
     }
+
+    // mistake=TrueのときはuserIdをパラメータに含める
+    const userId =
+      query.mistake === 'true'
+        ? store.getters['authentication/userData'].id
+        : null
     store
-      .dispatch('wordbook/fetchWords', { language, pos, authToken })
+      .dispatch('wordbook/fetchWords', { language, pos, userId, authToken })
       .then((response) => {
-        if (response.data.length) {
-          store.commit('wordbook/setWords', response.data);
-        }else{
-          store.commit('wordbook/setWords', []);
-        }
+        store.commit('wordbook/setWords', response.data)
       })
   },
 
@@ -77,7 +81,7 @@ export default {
 
   computed: {
     words() {
-      return this.$store.state.wordbook.words;
+      return this.$store.state.wordbook.words
     },
     //     getMistakeParam: function(){
     //         const mistakeParam = "{{ mistake }}";
@@ -110,27 +114,30 @@ export default {
         this.saveMistakenWords()
         this.index = 0
         alert('お疲れ様です！すべての問題が解き終わりました！！')
-        this.$router.push('/languages');
+        this.$router.push('/languages')
       }
     },
 
     // 間違えた問題の処理
     addMistakenWord() {
-      this.mistakenWords.push(this.words[this.index].id);
+      this.mistakenWords.push(this.words[this.index].id)
     },
     saveMistakenWords() {
-      const user = this.$store.getters['authentication/userData'];
+      const user = this.$store.getters['authentication/userData']
       const data = {
-        "mistakes": this.mistakenWords 
+        mistakes: this.mistakenWords,
       }
-      this.$axios.post(`/api/v1/users/${user.id}/mistake/`, 
-        JSON.stringify(data), 
-        {
-           headers: { "Authorization": "Token " + this.$store.getters['authentication/authToken'] }
-        }).then(() => {
-          this.mistakenWords.splice(0, this.mistakenWords.length);
+      this.$axios
+        .post(`/api/v1/users/${user.id}/mistake/`, JSON.stringify(data), {
+          headers: {
+            Authorization:
+              'Token ' + this.$store.getters['authentication/authToken'],
+          },
         })
-    }
+        .then(() => {
+          this.mistakenWords.splice(0, this.mistakenWords.length)
+        })
+    },
     //     saveProgress: function() {
     //         localStorage.removeItem(this.getStorageKey);
     //         localStorage.setItem(this.getStorageKey, this.index);
