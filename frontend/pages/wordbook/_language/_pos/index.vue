@@ -38,11 +38,12 @@
 export default {
   data() {
     return {
+      language: this.$route.params.language,
+      pos: this.$route.params.pos,
       index: 0,
       isRevealed: false,
       correct: false,
-      language: this.$route.params.language,
-      pos: this.$route.params.pos,
+      mistakenWords: [],
     }
   },
 
@@ -63,6 +64,7 @@ export default {
         }
       })
   },
+
   // mounted(){
   //     const vm = this;
 
@@ -72,6 +74,7 @@ export default {
   //         localStorage.removeItem(vm.getStorageKey)
   //     }
   // },
+
   computed: {
     words() {
       return this.$store.state.wordbook.words;
@@ -92,31 +95,48 @@ export default {
     //     },
   },
   methods: {
+    // 出力系
     toggleIsRevealed() {
       this.isRevealed = !this.isRevealed
     },
     moveOntoNextWord() {
       if (!this.correct) {
-        // this.saveMistakenWords()
+        this.addMistakenWord()
       }
       this.toggleIsRevealed()
       this.correct = false
       this.index++
       if (this.index >= this.words.length) {
-        // this.postMistakenWords()
+        this.saveMistakenWords()
         this.index = 0
-        alert('終了！')
+        alert('お疲れ様です！すべての問題が解き終わりました！！')
         this.$router.push('/languages');
       }
     },
+
+    // 間違えた問題の処理
+    addMistakenWord() {
+      this.mistakenWords.push(this.words[this.index].id);
+    },
+    saveMistakenWords() {
+      const user = this.$store.getters['authentication/userData'];
+      const data = {
+        "mistakes": this.mistakenWords 
+      }
+      this.$axios.post(`/api/v1/users/${user.id}/mistake/`, 
+        JSON.stringify(data), 
+        {
+           headers: { "Authorization": "Token " + this.$store.getters['authentication/authToken'] }
+        }).then(() => {
+          this.mistakenWords.splice(0, this.mistakenWords.length);
+        })
+    }
     //     saveProgress: function() {
     //         localStorage.removeItem(this.getStorageKey);
     //         localStorage.setItem(this.getStorageKey, this.index);
     //         this.postMistakenWords();
     //         window.location.href = "{% url 'languages' %}";
     //     },
-    //     saveMistakenWords: function() {
-    //         this.mistakenWords.push(this.words[this.index].id);
   },
 }
 </script>
