@@ -21,7 +21,6 @@ const actions = {
         if (payload.userId) {
             params.users = payload.userId;
         }
-        console.log(params)
         return  this.$axios.get('api/v1/words/', {
             params,
             headers: {

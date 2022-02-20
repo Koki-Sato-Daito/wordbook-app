@@ -12,7 +12,7 @@
           <div class="mt-5">
             <b-form-checkbox v-model="correct"> 正解</b-form-checkbox>
             <br />
-            <b-button variant="outline-light" @click="saveProgress"
+            <b-button variant="outline-light"
               >進捗を保存して戻る</b-button
             >
             <b-button variant="outline-light" @click="moveOntoNextWord"
@@ -40,6 +40,11 @@ export default {
     return {
       language: this.$route.params.language,
       pos: this.$route.params.pos,
+      mistakeParam: this.$route.params.mistake,
+
+      user: this.$store.getters['authentication/userData'],
+      authToken: this.$store.getters['authentication/authToken'],
+
       index: 0,
       isRevealed: false,
       correct: false,
@@ -83,21 +88,8 @@ export default {
     words() {
       return this.$store.state.wordbook.words
     },
-    //     getMistakeParam: function(){
-    //         const mistakeParam = "{{ mistake }}";
-    //         if (mistakeParam == "True"){
-    //             return true
-    //         }
-    //         return false
-    //     },
-    //     getStorageKey: function(){
-    //         if (this.getMistakeParam){
-    //             return 'progress-{{ language }}-{{ pos }}-mistake'
-    //         }else{
-    //             return 'progress-{{ language }}-{{ pos }}'
-    //         }
-    //     },
   },
+
   methods: {
     // 出力系
     toggleIsRevealed() {
@@ -122,16 +114,22 @@ export default {
     addMistakenWord() {
       this.mistakenWords.push(this.words[this.index].id)
     },
+    deleteMistakenWords() {
+      this.$axios.delete(`/api/v1/users/${this.user.id}/mistake/`, {
+        headers: {
+          Authorization: 'Token ' + this.authToken,
+        },
+      })
+    },
     saveMistakenWords() {
-      const user = this.$store.getters['authentication/userData']
       const data = {
         mistakes: this.mistakenWords,
       }
+      this.deleteMistakenWords()
       this.$axios
-        .post(`/api/v1/users/${user.id}/mistake/`, JSON.stringify(data), {
+        .post(`/api/v1/users/${this.user.id}/mistake/`, JSON.stringify(data), {
           headers: {
-            Authorization:
-              'Token ' + this.$store.getters['authentication/authToken'],
+            Authorization: 'Token ' + this.authToken,
           },
         })
         .then(() => {
