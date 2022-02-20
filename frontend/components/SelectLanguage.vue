@@ -11,13 +11,13 @@
       <div v-for="(value, key) in item.pos" :key="key">
         <b-button
           variant="link"
-          @click.stop.prevent="wordbookPage(item.id, value)"
+          @click.stop.prevent="wordbookPage(item.language, value)"
         >
           {{ key }}
         </b-button>
         <b-button
           variant="link"
-          @click.prevent="wordbookPageWithMistake(item.id, value)"
+          @click.prevent="wordbookPageWithMistake(item.language, value)"
         >
           間違った{{ key }}
         </b-button>
@@ -35,12 +35,12 @@ export default {
     item: Object,
   },
   methods: {
-    wordbookPage(id, pos) {
-      this.$store.dispatch('wordbookMeta/setWordbookMeta', { id, pos })
+    wordbookPage(language, pos) {
+      this.$router.push(`wordbook/${language}/${pos}/`);
     },
-    wordbookPageWithMistake(id, pos) {
+    wordbookPageWithMistake(language, pos) {
       // mistake用のフラグを作る
-      this.$store.dispatch('wordbookMeta/setWordbookMeta', { id, pos })
+      this.$router.push(`wordbook/${language}/${pos}/`);
     },
   },
 }
