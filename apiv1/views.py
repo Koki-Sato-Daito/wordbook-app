@@ -3,12 +3,13 @@ from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from djoser import utils
 from djoser.views import TokenCreateView
-from rest_framework import generics, status
+from rest_framework import generics, status, mixins, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from wordbook.models import Word
-from . import serializers
+from progress.models import Progress
+from apiv1 import serializers
 
 
 class TokenCreateView(TokenCreateView):
@@ -63,3 +64,12 @@ class MistakeWordAPIView(generics.GenericAPIView):
         user = get_object_or_404(get_user_model(), id=user_id)
         user.mistake_words.clear()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProgressViewSet(mixins.CreateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.DestroyModelMixin,
+                      viewsets.GenericViewSet):
+    queryset = Progress.objects.all()
+    serializer_class = serializers.ProgressSerializer
+    permission_classes = [IsAuthenticated]
