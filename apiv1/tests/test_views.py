@@ -7,54 +7,46 @@ from wordbook.models import Word
 from progress.models import Progress
 
 
-class TestWordListAPIView(APITestCase):
+class TestInitWordbookPageAPIView(APITestCase):
     fixtures = ['users.json', 'words.json']
-    TARGET_URL = '/api/v1/words/'
+    TARGET_URL = '/api/v1/init_wordbook_page/'
     user = None
-    token = None
 
     @classmethod
     def setUpTestData(cls):
         cls.user = get_user_model().objects.get(email='test1@example.com')
-        for i in range(1, 3):
-            cls.user.mistake_words.add(Word.objects.get(pk=i).id)
+        Progress.objects.create(
+            language='java', pos='noun', user=cls.user, mistake=False, index=100)
 
-    def test_get_words(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(self.TARGET_URL)
-        self.assertEqual(response.status_code, 200)
-        data = json.loads(response.content)
-        self.assertEqual(len(data), 6)
-
-    def test_get_words_with_params_python_verb(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(
-            self.TARGET_URL,  {'language': 'python', 'pos': 'verb'})
-        self.assertEqual(response.status_code, 200)
-        data = json.loads(response.content)
-        self.assertEqual(len(data), 2)
-
-    def test_get_words_with_parms_python_noun(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(
-            self.TARGET_URL,  {'language': 'python', 'pos': 'noun'})
-        self.assertEqual(response.status_code, 200)
-        data = json.loads(response.content)
-        self.assertEqual(data[0]['wordname'], 'apple')
-
-    def test_cannot_get_response_without_auth(self):
-        response = self.client.get(self.TARGET_URL)
+    def test_cannot_return_data_without_login(self):
+        response = self.client.get(self.TARGET_URL + '?language=java&pos=noun')
         self.assertEqual(response.status_code, 401)
 
-    def test_get_words_with_parms_test1_user(self):
+    def test_return_words_with_params_language_pos(self):
         self.client.force_authenticate(user=self.user)
-        response = self.client.get(self.TARGET_URL,
-                                   {'language': 'java', 'pos': 'noun', 'users': self.user.id})
+        response = self.client.get(self.TARGET_URL + '?language=java&pos=noun')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
-        self.assertEqual(len(data), 2)
-        self.assertEqual(data[0]['wordname'], 'apple')
-        self.assertEqual(data[1]['wordname'], 'orange')
+        self.assertEqual(len(data['words']), 3)
+
+    def test_return_words_and_progress(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            self.TARGET_URL + '?language=java&pos=noun&mistake=false&user=' + str(self.user.id))
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(len(data['words']), 3)
+        self.assertEqual(data['progress']['index'], 100)
+
+    def test_return_only_words_when_progress_data_is_not_exists(self):
+        self.client.force_authenticate(user=self.user)
+        # java,noun,mistake=trueはwordsもprogressも存在しない。
+        response = self.client.get(
+            self.TARGET_URL + '?language=java&pos=noun&mistake=true&user=' + str(self.user.id))
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(len(data['words']), 0)
+        self.assertEqual(data['progress'], None)
 
 
 class TestMistakeWordAPIView(APITestCase):
@@ -132,17 +124,6 @@ class TestProgressViewSet(APITestCase):
         cls.progress = Progress.objects.create(
             user=cls.user, language='python', pos='noun', mistake=False, index=100)
 
-    # retrieve
-    def test_retireve_progress_instance(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(self.TARGET_URL + str(self.progress.id) + '/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['index'], self.progress.index)
-
-    def test_cannot_retireve_progress_instance_without_login(self):
-        response = self.client.get(self.TARGET_URL + str(self.progress.id) + '/')
-        self.assertEqual(response.status_code, 401)
-
     # create
     def test_create_progress_insatnce(self):
         self.client.force_authenticate(user=self.user)
@@ -151,7 +132,7 @@ class TestProgressViewSet(APITestCase):
             'language': 'java',
             'pos': 'verb',
             'mistake': False,
-            'index': 100 
+            'index': 100
         }
         response = self.client.post(self.TARGET_URL, params)
         self.assertEqual(response.status_code, 201)
@@ -163,7 +144,7 @@ class TestProgressViewSet(APITestCase):
             'language': 'FORTRAN',
             'pos': 'noun',
             'mistake': False,
-            'index': 100 
+            'index': 100
         }
         response = self.client.post(self.TARGET_URL, params)
         self.assertEqual(response.status_code, 400)
@@ -176,7 +157,7 @@ class TestProgressViewSet(APITestCase):
             'language': 'python',
             'pos': 'noun',
             'mistake': False,
-            'index': 100 
+            'index': 100
         }
         response = self.client.post(self.TARGET_URL, params)
         response = self.client.post(self.TARGET_URL, params)
@@ -187,6 +168,6 @@ class TestProgressViewSet(APITestCase):
     # delete
     def test_delete_prgress_data(self):
         self.client.force_authenticate(user=self.user)
-        response = self.client.delete(self.TARGET_URL + str(self.progress.id) + '/')
+        response = self.client.delete(
+            self.TARGET_URL + str(self.progress.id) + '/')
         self.assertEqual(response.status_code, 204)
-

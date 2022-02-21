@@ -167,3 +167,21 @@ class TestProgressSerializer(APITestCase):
         s2 = serializers.ProgressSerializer(data=data)
         with self.assertRaises(ValidationError):
             s2.is_valid(raise_exception=True)
+
+
+class TestInitWordbookPageSerializer(APITestCase):
+    fixtures = ['users.json', 'words.json']
+    user = None
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = get_user_model().objects.get(username='test1')
+        Progress.objects.create(user=cls.user, language='java', pos='noun', mistake=False, index=100)
+
+    def test_serialize_progress_correctly(self):
+        words = Word.objects.filter(language='java', pos='noun')
+        progress = Progress.objects.get(user=self.user)
+        instance = {'words': words, 'progress': progress}
+        serializer = serializers.InitWordbookPageSerializer(instance=instance)
+        self.assertEqual(len(serializer.data['words']), 3)
+        self.assertEqual(serializer.data['progress']['index'], 100)

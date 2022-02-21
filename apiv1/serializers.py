@@ -81,3 +81,8 @@ class ProgressSerializer(serializers.ModelSerializer):
                 f'Progress(user={user}, language={language}, pos={pos}, mistake={mistake}'
             )
         return validated_data 
+
+
+class InitWordbookPageSerializer(serializers.Serializer):
+    words = WordSerializer(many=True)
+    progress = ProgressSerializer()
