@@ -1,4 +1,4 @@
-from tokenize import Token
+from signal import alarm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from djoser.serializers import TokenSerializer
@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 from accounts.models import User
 from wordbook.models import Word
+from progress.models import Progress
 
 
 class TokenSerializer(TokenSerializer):
@@ -59,3 +60,25 @@ class UserMistakeSerializer(serializers.ModelSerializer):
         words = validated_data.get('mistake_words')
         user.mistake_words.add(*words)
         return user
+
+
+class ProgressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Progress
+        fields = ['user', 'language', 'pos', 'mistake', 'index']
+
+    def validate(self, validated_data):
+        # 複合ユニーク制約のバリデーション
+        user = validated_data.get('user')
+        language = validated_data.get('language')
+        pos = validated_data.get('pos')
+        mistake = validated_data.get('mistake')
+
+        already_exist = Progress.objects.filter(
+            user=user, language=language, pos=pos, mistake=mistake)
+        if already_exist:
+            raise serializers.ValidationError(
+                'すでに進捗データが存在します。書き換えるには削除してください。'
+                f'Progress(user={user}, language={language}, pos={pos}, mistake={mistake}'
+            )
+        return validated_data 
