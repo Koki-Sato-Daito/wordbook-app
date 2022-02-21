@@ -75,6 +75,10 @@ DATABASES = {
     }
 }
 
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR, 'fixtures'),
+)
+
 AUTH_USER_MODEL = 'accounts.User'
 
 AUTH_PASSWORD_VALIDATORS = [

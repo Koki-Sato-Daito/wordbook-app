@@ -6,7 +6,7 @@ from ..models import Progress
 
 
 class ProgressTestCase(TestCase):
-    fixtures = ['user.json', 'words.json']
+    fixtures = ['users.json', 'words.json']
     user = None
 
     @classmethod
