@@ -4,10 +4,9 @@ from wordbook.models import Word
 
 
 def validate_language(language):
-    language_list = Word.objects.values_list('language')
-    print(language)
-    print(language_list)
-    if not language in language_list:
+    language_list = Word.objects.distinct().values_list('language')
+    languages = [l[0] for l in language_list]
+    if not language in languages:
         raise ValidationError(f'{language}という言語には対応していません。')
 
 
