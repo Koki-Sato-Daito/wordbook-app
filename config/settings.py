@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'apiv1.apps.Apiv1Config',
     'wordbook.apps.WordbookConfig',
+    'progress.apps.ProgressConfig'
 ]
 
 MIDDLEWARE = [

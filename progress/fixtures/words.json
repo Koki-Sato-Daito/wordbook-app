@@ -1,0 +1,23 @@
+[{
+    "model": "wordbook.Word",
+    "pk": 1,
+    "fields": {
+        "wordname": "apple",
+        "meaning": "りんご",
+        "pos": "noun",
+        "language": "java",
+        "freq": "1000"
+    }
+},
+{
+    "model": "wordbook.Word",
+    "pk": 2,
+    "fields": {
+        "wordname": "orange",
+        "meaning": "オレンジ",
+        "pos": "verb",
+        "language": "python",
+        "freq": "980"
+    }
+}
+]
