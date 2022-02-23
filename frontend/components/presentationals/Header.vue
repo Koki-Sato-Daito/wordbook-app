@@ -4,12 +4,12 @@
       <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
 
       <b-navbar-brand
-        ><a class="link-button" href="">app_name</a></b-navbar-brand
+        ><a class="link-button" href="">{{ appname }}</a></b-navbar-brand
       >
 
       <b-collapse id="nav-text-collapse" is-nav>
         <b-navbar-nav>
-          <div v-if="authToken">
+          <div v-if="authtoken">
             <b-nav-text class="mx-3">{{ username }} さん</b-nav-text>
             <b-nav-text
               ><i class="link-button"
@@ -33,17 +33,34 @@
   </header>
 </template>
 <script>
-import { mapState } from 'vuex'
-
 export default {
-  computed: {
-    ...mapState({
-      authToken: (state) => state.authentication.authToken,
-      userId: (state) => state.authentication.userData.id,
-      username: (state) => state.authentication.userData.username,
-      email: (state) => state.authentication.userData.email,
-    }),
-  }
+    props: {
+        appname: {
+          type: String,
+          required: true,
+          default: 'アプリ名'
+        },
+        authtoken: {
+          type: null,
+          required: true,
+          default: ''
+        },
+        userid: {
+          type: String,
+          required: true,
+          default: ''
+        },
+        username: {
+          type: String,
+          required: true,
+          default: '名無し'
+        },
+        email: {
+          type: String,
+          required: true,
+          default: ''
+        }
+    }
 }
 </script>
 <style>

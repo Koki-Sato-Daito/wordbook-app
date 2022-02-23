@@ -1,6 +1,7 @@
 export default function ({ $axios, redirect }) {
     $axios.onRequest(config => {
-        console.log('Making request to ' + config.url);
+        console.log(`(${config.method}) ${config.url} body=${JSON.stringify(config.data)}` +  
+        `params=${JSON.stringify(config.params)}`);
     })
 
     $axios.onError(error => {

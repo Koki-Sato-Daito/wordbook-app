@@ -1,19 +1,19 @@
 <template>
   <div>
-    <p>ログアウトしました。リダイレクトします。</p>
+    <div class="d-flex justify-content-center mb-3">
+      <b-spinner label="Loading..."></b-spinner>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  fetch({ store, redirect }) {
-    const authToken =  store.getters['authentication/authToken'];
-    if (authToken) {
-      store.dispatch('authentication/logout').then(() => {
+  fetch({ store, redirect }) {;
+      store.dispatch('authentication/logout')
+      .then(() => {
         store.commit('authentication/deleteAuthData')
+        redirect('/')
       })
-    }
-    redirect('/');
   },
 }
 </script>
