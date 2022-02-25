@@ -1,8 +1,11 @@
 <template>
   <containers-wordbook
+    :word-index="wordIndex"
     :words="words"
+    @increment-word-index="incrementWordIndex"
     @check-answer="storeUpCorrectWords"
     @finish="finish"
+    @stop-studying="stopStudying"
   ></containers-wordbook>
 </template>
 
@@ -21,6 +24,7 @@ export default {
       user: this.$store.getters['authentication/userData'],
       authToken: this.$store.getters['authentication/authToken'],
 
+      wordIndex: 0,
       words: [],
       correctWords: [],
     }
@@ -45,10 +49,16 @@ export default {
       })
   },
   methods: {
+    incrementWordIndex() {
+      this.wordIndex++
+    },
     storeUpCorrectWords(localIndex, isCorrect) {
       if (isCorrect) {
         this.correctWords.push(this.words[localIndex].id)
       }
+    },
+    stopStudying() {
+      this.saveCorrectWords()
     },
     finish() {
       this.saveCorrectWords()

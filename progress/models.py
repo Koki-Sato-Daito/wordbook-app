@@ -1,4 +1,5 @@
-from asyncio import constants
+import uuid
+
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -6,6 +7,7 @@ from .validations import validate_language, validate_pos
 
 
 class Progress(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, null=False)
     language = models.CharField('言語', max_length=20, null=False,

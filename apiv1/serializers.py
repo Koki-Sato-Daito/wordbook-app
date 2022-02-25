@@ -66,7 +66,7 @@ class UserMistakeSerializer(serializers.ModelSerializer):
 class ProgressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Progress
-        fields = ['user', 'language', 'pos', 'mistake', 'index']
+        fields = ['id', 'user', 'language', 'pos', 'mistake', 'index']
 
     def validate(self, validated_data):
         # 複合ユニーク制約のバリデーション

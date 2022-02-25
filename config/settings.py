@@ -9,8 +9,8 @@ env.read_env('.env')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = False
-ALLOWED_HOSTS = ['.herokuapp.com']
+DEBUG = env('DEBUG')
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -74,8 +74,6 @@ DATABASES = {
         'PORT': env('DB_PORT'),
     }
 }
-
-STATIC_URL = '/static/'
 
 FIXTURE_DIRS = (
    os.path.join(BASE_DIR, 'fixtures'),
@@ -159,10 +157,3 @@ try:
     from config.local_settings import *
 except ImportError:
     pass
-
-if not DEBUG:
-    import dj_database_url
-    db_from_env = dj_database_url.config()
-    DATABASES = {
-        'default': dj_database_url.config()
-    }

@@ -2,7 +2,8 @@
   <div id="wordbook">
     <br />
     <div class="wordcard">
-      <div v-if="words.length" class="text-center py-5 mb-5">
+      <div v-if="words.length && wordIndex < words.length" class="text-center py-5 mb-5">
+        <div>{{ wordIndex+1 }}/{{ words.length }}</div>
         <div class="mt-3 mb-5">
           <span>出現回数: {{ words[wordIndex]['freq'] }}</span>
         </div>
@@ -12,7 +13,7 @@
           <div class="mt-5">
             <b-form-checkbox v-model="localCorrect"> 正解</b-form-checkbox>
             <br />
-            <b-button variant="outline-light">進捗を保存して戻る</b-button>
+            <b-button variant="outline-light" @click.prevent.stop="stopStudying">進捗を保存して戻る</b-button>
             <b-button variant="outline-light" @click.prevent.stop="moveOntoNextWord"
               >次の単語へ</b-button
             >
@@ -71,6 +72,9 @@ export default {
       this.toggleIsRevealed()
       this.$emit('move-onto-next-word')
     },
+    stopStudying() {
+      this.$emit("stop-studying")
+    }
   },
 }
 </script>

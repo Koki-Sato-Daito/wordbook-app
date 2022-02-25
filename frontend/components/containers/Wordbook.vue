@@ -4,6 +4,7 @@
     :words="words"
     :is-correct.sync="isCorrect"
     @move-onto-next-word="moveOntoNextWord"
+    @stop-studying="stopStudying"
   ></presentational-wordbook>
 </template>
 
@@ -19,20 +20,25 @@ export default {
       type: Array,
       required: true,
     },
+    wordIndex: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
       isCorrect: false,
-      wordIndex: 0
     }
   },
   methods: {
+    incrementWordIndex() {
+      this.$emit('increment-word-index')
+    },
     moveOntoNextWord() {
       this.$emit('check-answer', this.wordIndex, this.isCorrect);
       this.isCorrect = false
-      this.wordIndex++
-      if (this.wordIndex >= this.words.length) {
-        this.wordIndex=0
+      this.incrementWordIndex()
+      if (this.wordIndex === this.words.length-1) {
         this.finish()
       }
     },
@@ -41,6 +47,11 @@ export default {
       alert('お疲れ様です！すべての問題が解き終わりました！！')
       this.$router.push('/languages')
     },
+    stopStudying() {
+      this.$emit('check-answer', this.wordIndex, this.isCorrect);
+      this.$emit('stop-studying')
+      this.$router.push('/languages')
+    }
   },
 }
 </script>

@@ -1,8 +1,11 @@
 <template>
   <containers-wordbook
     :words="words"
+    :word-index="wordIndex"
+    @increment-word-index="incrementWordIndex"
     @check-answer="storeUpMistakeWords"
     @finish="finish"
+    @stop-studying="saveProgress"
   ></containers-wordbook>
 </template>
 
@@ -21,11 +24,11 @@ export default {
       user: this.$store.getters['authentication/userData'],
       authToken: this.$store.getters['authentication/authToken'],
 
+      wordIndex: 0,
       words: [],
       mistakenWords: [],
     }
   },
-
   created() {
     // get用のクエリパラメータを用意
     const q = {
@@ -42,12 +45,16 @@ export default {
       })
       .then((response) => {
         this.words = response.data.words
-        // if (response.data.progress) {
-        //   this.index = response.data.progress.index
-        // }
+        if (response.data.progress) {
+          this.wordIndex = response.data.progress.index
+          this.deleteProgress(response.data.progress.id)
+        }
       })
   },
   methods: {
+    incrementWordIndex() {
+      this.wordIndex++
+    },
     storeUpMistakeWords(localIndex, isCorrect) {
       if (!isCorrect) {
         this.mistakenWords.push(this.words[localIndex].id)
@@ -55,6 +62,7 @@ export default {
     },
     finish() {
       this.saveMistakenWords()
+      this.wordIndex=0
     },
     saveMistakenWords() {
       const data = {
@@ -69,6 +77,28 @@ export default {
         .then(() => {
           this.mistakenWords.splice(0, this.mistakenWords.length)
         })
+    },
+    saveProgress() {
+      this.saveMistakenWords()
+      const data = {
+        language: this.language,
+        pos: this.pos,
+        mistake: false,
+        user: this.user.id,
+        index: this.wordIndex,
+      }
+      this.$axios.post('/api/v1/progress/', data, {
+        headers: {
+          Authorization: 'Token ' + this.authToken,
+        },
+      })
+    },
+    deleteProgress(progressId) {
+      this.$axios.delete(`/api/v1/progress/${progressId}/`, {
+        headers: {
+          Authorization: 'Token ' + this.authToken,
+        },
+      })
     },
   },
 }
