@@ -1,8 +1,19 @@
+from wsgiref import validate
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from djoser.serializers import TokenSerializer
 from rest_framework import serializers
+
 from accounts.models import User
 from wordbook.models import Word
+from progress.models import Progress
+
+
+class TokenSerializer(TokenSerializer):
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['user'] = self.context['user']
+        return response
 
 
 class WordSerializer(serializers.ModelSerializer):
@@ -15,20 +26,16 @@ class WordSerializer(serializers.ModelSerializer):
 class UserMistakeSerializer(serializers.ModelSerializer):
 
     class WordSerializer(serializers.ModelSerializer):
-        """
-        mistake_words用のシリアライザ
-        """
         class Meta:
             model = Word
             fields = ('id', 'wordname', 'meaning', 'pos',
-                    'language', 'freq')
-    
+                      'language', 'freq')
+
     mistakes = serializers.PrimaryKeyRelatedField(
         queryset=Word.objects.all(),
-        source = 'mistake_words',
+        source='mistake_words',
         many=True,
         write_only=True,
-
     )
 
     words = WordSerializer(
@@ -45,8 +52,39 @@ class UserMistakeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user_id = self.context.get('user_id')
         user = get_object_or_404(get_user_model(), id=user_id)
-        # user = get_user_model().objects.get(id=user_id)
         words = validated_data.get('mistake_words')
         user.mistake_words.add(*words)
         return user
+    
+    def update(self, instance, validated_data):
+        correct_words = validated_data.get('mistake_words')
+        for words in correct_words:
+            instance.mistake_words.remove(words)
+        return instance
 
+
+class ProgressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Progress
+        fields = ['id', 'user', 'language', 'pos', 'mistake', 'index']
+
+    def validate(self, validated_data):
+        # 複合ユニーク制約のバリデーション
+        user = validated_data.get('user')
+        language = validated_data.get('language')
+        pos = validated_data.get('pos')
+        mistake = validated_data.get('mistake')
+
+        already_exist = Progress.objects.filter(
+            user=user, language=language, pos=pos, mistake=mistake)
+        if already_exist:
+            raise serializers.ValidationError(
+                'すでに進捗データが存在します。書き換えるには削除してください。'
+                f'Progress(user={user}, language={language}, pos={pos}, mistake={mistake}'
+            )
+        return validated_data 
+
+
+class InitWordbookPageSerializer(serializers.Serializer):
+    words = WordSerializer(many=True)
+    progress = ProgressSerializer()
