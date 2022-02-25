@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
  
     'django_bootstrap5',
     'import_export',
@@ -74,6 +75,8 @@ DATABASES = {
         'PORT': env('DB_PORT'),
     }
 }
+
+STATIC_URL = '/static/'
 
 FIXTURE_DIRS = (
    os.path.join(BASE_DIR, 'fixtures'),
