@@ -9,16 +9,10 @@
       :title="item.name"
     >
       <div v-for="(value, key) in item.pos" :key="key">
-        <b-button
-          variant="link"
-          @click.stop.prevent="wordbookPage(item.language, value)"
-        >
+        <b-button variant="link" @click.prevent="clickLink(value, false)">
           {{ key }}
         </b-button>
-        <b-button
-          variant="link"
-          @click.prevent="wordbookPageWithMistake(item.language, value)"
-        >
+        <b-button variant="link" @click.prevent="clickLink(value, true)">
           間違った{{ key }}
         </b-button>
       </div>
@@ -32,16 +26,16 @@
 <script>
 export default {
   props: {
-    item: Object,
+    item: {
+      type: Object,
+      required: true,
+    },
   },
   methods: {
-    wordbookPage(language, pos) {
-      this.$router.push(`wordbook/${language}/${pos}/`);
-    },
-    wordbookPageWithMistake(language, pos) {
-      this.$router.push(`wordbook/${language}/${pos}/?mistake=true`);
-    },
-  },
+      clickLink(pos, mistake) {
+          this.$emit('moveToWordbookPage', pos, mistake)
+      }
+  }
 }
 </script>
 

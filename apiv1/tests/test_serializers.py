@@ -76,6 +76,18 @@ class TestUserMistakeSerializer(APITestCase):
         serializer.save()
         self.assertEqual(len(serializer.data['words']), 2)
 
+    def test_patch_mistake_words_correctly(self):
+        self.user.mistake_words.add(self.word1, self.word2)
+        data = {
+            "mistakes": [self.word1.id],
+        }
+        serializer = serializers.UserMistakeSerializer(self.user,
+            data=data, partial=True, context={'user_id': self.user.id})
+        self.assertTrue(serializer.is_valid())
+        serializer.save()
+        self.assertEqual(len(serializer.data['words']), 1)
+        self.assertEqual(serializer.data['words'][0]['id'], self.word2.id)
+
 
 class TestTokenSerializer(APITestCase):
     fixtures = ['users.json']
@@ -108,7 +120,8 @@ class TestProgressSerializer(APITestCase):
 
     # serialize
     def test_serialize_progress_correctly(self):
-        progress = Progress(user=self.user, language='python', pos='noun', mistake=True, index=100)
+        progress = Progress(user=self.user, language='python',
+                            pos='noun', mistake=True, index=100)
         serializer = serializers.ProgressSerializer(instance=progress)
         self.assertEqual(serializer.data['user'], self.user.id)
         self.assertEqual(serializer.data['language'], 'python')
@@ -176,7 +189,8 @@ class TestInitWordbookPageSerializer(APITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = get_user_model().objects.get(username='test1')
-        Progress.objects.create(user=cls.user, language='java', pos='noun', mistake=False, index=100)
+        Progress.objects.create(
+            user=cls.user, language='java', pos='noun', mistake=False, index=100)
 
     def test_serialize_progress_correctly(self):
         words = Word.objects.filter(language='java', pos='noun')

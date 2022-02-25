@@ -53,6 +53,14 @@ class MistakeWordAPIView(generics.GenericAPIView):
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
 
+    def patch(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(get_user_model(), id=user_id)
+        serializer = serializers.UserMistakeSerializer(user,
+            data=request.data, partial=True, context={'user_id': user.id})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_200_OK)
+
     def delete(self, request, user_id, *args, **kwargs):
         user = get_object_or_404(get_user_model(), id=user_id)
         user.mistake_words.clear()
@@ -74,20 +82,20 @@ class InitWordbookPageAPIView(views.APIView):
         filter = WordFilter(request.query_params)
         if not filter.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        # クエリパラメータから値を取得
         language = filter.data.get('language')
         pos = filter.data.get('pos')
         user = None
-        user_id = filter.data.get('user')
-        if user_id:
-            user = get_user_model().objects.get(id=uuid.UUID(user_id))
-        mistake = True  if request.query_params.get('mistake')=="true" else False
+        if filter.data.get('user'):
+            user = get_user_model().objects.get(id=uuid.UUID(filter.data.get('user')))
+        mistake = True if request.query_params.get('mistake') == 'true' else False
 
         words = Word.objects.all()
         if language:
             words = words.filter(language=language)
         if pos:
             words = words.filter(pos=pos)
-        if user and mistake:
+        if mistake:
             words = words.filter(users=user)
         serializer = serializers.WordSerializer(instance=words, many=True)
         

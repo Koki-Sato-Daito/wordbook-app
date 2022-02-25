@@ -1,3 +1,4 @@
+from wsgiref import validate
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from djoser.serializers import TokenSerializer
@@ -25,9 +26,6 @@ class WordSerializer(serializers.ModelSerializer):
 class UserMistakeSerializer(serializers.ModelSerializer):
 
     class WordSerializer(serializers.ModelSerializer):
-        """
-        mistake_words用のシリアライザ
-        """
         class Meta:
             model = Word
             fields = ('id', 'wordname', 'meaning', 'pos',
@@ -38,7 +36,6 @@ class UserMistakeSerializer(serializers.ModelSerializer):
         source='mistake_words',
         many=True,
         write_only=True,
-
     )
 
     words = WordSerializer(
@@ -55,10 +52,16 @@ class UserMistakeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user_id = self.context.get('user_id')
         user = get_object_or_404(get_user_model(), id=user_id)
-        # user = get_user_model().objects.get(id=user_id)
         words = validated_data.get('mistake_words')
         user.mistake_words.add(*words)
         return user
+    
+    # words送られてきたのリストをPATCHする。(api/v1/users/id/mistake/)
+    def update(self, instance, validated_data):
+        correct_words = validated_data.get('mistake_words')
+        for words in correct_words:
+            instance.mistake_words.remove(words)
+        return instance
 
 
 class ProgressSerializer(serializers.ModelSerializer):

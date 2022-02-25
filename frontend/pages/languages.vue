@@ -9,17 +9,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import selectLanguage from '~/components/SelectLanguage'
+import SelectLanguage from '~/components/containers/SelectLanguage'
 
 export default {
   components: {
-    'select-language': selectLanguage,
-  },
-  fetch({ store, redirect }) {
-    const authToken =  store.getters['authentication/authToken'];
-    if (!authToken) {
-      redirect('/')
-    }
+    SelectLanguage,
   },
   computed: {
     ...mapGetters({ items: 'wordbookMeta/items' }),

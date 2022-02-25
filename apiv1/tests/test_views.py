@@ -54,12 +54,15 @@ class TestMistakeWordAPIView(APITestCase):
     TARGET_URL = ''
     user = None
     token = None
+    word = word1 = word2 = None
 
     @classmethod
     def setUpTestData(cls):
         cls.user = get_user_model().objects.get(email='test1@example.com')
         cls.TARGET_URL = '/api/v1/users/{user_id}/mistake/'.format(
             user_id=cls.user.id)
+        cls.word = cls.word1 = Word.objects.get(pk=1)
+        cls.word2 = Word.objects.get(pk=2)
 
     # post
     def test_user_register_mistske_words_correctly(self):
@@ -99,6 +102,37 @@ class TestMistakeWordAPIView(APITestCase):
         }
         response = self.client.post(
             self.TARGET_URL, params)
+        self.assertEqual(response.status_code, 400)
+
+    # update
+    def test_user_remove_mistake_simple_word_correctly(self):
+        self.user.mistake_words.add(self.word1, self.word2)
+        self.client.force_authenticate(user=self.user)
+        params = {
+            "mistakes": {1}
+        }
+        response = self.client.patch(self.TARGET_URL, params)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['words']), 1)
+        self.assertEqual(response.data['words'][0]['id'], 2)
+
+    def test_user_remove_mistake_mutiple_words_correctly(self):
+        self.user.mistake_words.add(self.word1, self.word2)
+        self.client.force_authenticate(user=self.user)
+        params = {
+            "mistakes": {1,2}
+        }
+        response = self.client.patch(self.TARGET_URL, params)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['words']), 0)
+
+    def test_should_return_error_when_invalid_params(self):
+        self.user.mistake_words.add(self.word1, self.word2)
+        self.client.force_authenticate(user=self.user)
+        params = {
+            "mistakes": {1000000}
+        }
+        response = self.client.patch(self.TARGET_URL, params)
         self.assertEqual(response.status_code, 400)
 
     # delete
