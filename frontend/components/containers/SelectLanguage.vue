@@ -21,7 +21,7 @@ export default {
   methods: {
     moveToWordbookPage(pos, mistake) {
       let url = `wordbook/${this.item.language}/${pos}/`
-      url += mistake ? "mistake=true" : ""
+      url += mistake ? "mistake/" : ""
       this.$router.push(url)
     },
   },

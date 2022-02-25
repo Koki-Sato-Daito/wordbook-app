@@ -1,7 +1,7 @@
 <template>
   <containers-wordbook
     :words="words"
-    @check-answer="storeUpMistakeWords"
+    @check-answer="storeUpCorrectWords"
     @finish="finish"
   ></containers-wordbook>
 </template>
@@ -22,16 +22,16 @@ export default {
       authToken: this.$store.getters['authentication/authToken'],
 
       words: [],
-      mistakenWords: [],
+      correctWords: [],
     }
   },
-
+  
   created() {
-    // get用のクエリパラメータを用意
     const q = {
       language: this.language,
       pos: this.pos,
       user: this.user.id,
+      mistake: true
     }
     this.$axios
       .get('api/v1/init_wordbook_page/', {
@@ -42,34 +42,32 @@ export default {
       })
       .then((response) => {
         this.words = response.data.words
-        // if (response.data.progress) {
-        //   this.index = response.data.progress.index
-        // }
       })
   },
   methods: {
-    storeUpMistakeWords(localIndex, isCorrect) {
-      if (!isCorrect) {
-        this.mistakenWords.push(this.words[localIndex].id)
+    storeUpCorrectWords(localIndex, isCorrect) {
+      if (isCorrect) {
+        this.correctWords.push(this.words[localIndex].id)
       }
     },
     finish() {
-      this.saveMistakenWords()
+      this.saveCorrectWords()
     },
-    saveMistakenWords() {
+    saveCorrectWords() {
       const data = {
-        mistakes: this.mistakenWords,
+        mistakes: this.correctWords,
       }
       this.$axios
-        .post(`/api/v1/users/${this.user.id}/mistake/`, JSON.stringify(data), {
+        .patch(`/api/v1/users/${this.user.id}/mistake/`, JSON.stringify(data), {
           headers: {
             Authorization: 'Token ' + this.authToken,
           },
         })
         .then(() => {
-          this.mistakenWords.splice(0, this.mistakenWords.length)
+          this.correctWords.splice(0, this.correctWords.length)
         })
     },
-  },
+  }
 }
+
 </script>

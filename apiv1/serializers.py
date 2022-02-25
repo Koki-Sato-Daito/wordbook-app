@@ -56,7 +56,6 @@ class UserMistakeSerializer(serializers.ModelSerializer):
         user.mistake_words.add(*words)
         return user
     
-    # words送られてきたのリストをPATCHする。(api/v1/users/id/mistake/)
     def update(self, instance, validated_data):
         correct_words = validated_data.get('mistake_words')
         for words in correct_words:
