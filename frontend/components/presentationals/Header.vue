@@ -19,7 +19,9 @@
           </div>
           <div v-else>
             <b-nav-text class="mx-3"
-              ><a class="link-button" href="">サインアップ</a></b-nav-text
+              ><i class="link-button"
+                ><nuxt-link to="/signup">サインアップ</nuxt-link></i
+              ></b-nav-text
             >
             <b-nav-text
               ><i class="link-button"
@@ -34,33 +36,33 @@
 </template>
 <script>
 export default {
-    props: {
-        appname: {
-          type: String,
-          required: true,
-          default: 'アプリ名'
-        },
-        authtoken: {
-          type: null,
-          required: true,
-          default: ''
-        },
-        userid: {
-          type: String,
-          required: true,
-          default: ''
-        },
-        username: {
-          type: String,
-          required: true,
-          default: '名無し'
-        },
-        email: {
-          type: String,
-          required: true,
-          default: ''
-        }
-    }
+  props: {
+    appname: {
+      type: String,
+      required: true,
+      default: 'アプリ名',
+    },
+    authtoken: {
+      type: null,
+      required: true,
+      default: '',
+    },
+    userid: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    username: {
+      type: String,
+      required: true,
+      default: '名無し',
+    },
+    email: {
+      type: String,
+      required: true,
+      default: '',
+    },
+  },
 }
 </script>
 <style>

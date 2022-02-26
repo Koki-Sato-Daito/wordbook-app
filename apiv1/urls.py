@@ -11,6 +11,7 @@ router.register('', ProgressViewSet)
 app_name = 'apiv1'
 urlpatterns = [
     path('auth/token/login/', TokenCreateView.as_view()),
+    path('auth/', include('djoser.urls.base')),
     path('auth/', include('djoser.urls.authtoken')),
     
     path('init_wordbook_page/', InitWordbookPageAPIView.as_view()),

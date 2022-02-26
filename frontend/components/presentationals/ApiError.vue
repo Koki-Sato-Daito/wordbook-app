@@ -1,21 +1,23 @@
 <template>
-    <div v-if="errorsArray.length">
-        <div class="alert alert-danger" role="alert">
-          <div v-for="error in errorsArray" :key="error">
-            <i class="error">{{ error }}</i
-            ><br />
-          </div>
+  <div v-if="Object.keys(errors).length">
+    <div class="alert alert-danger" role="alert">
+      <div v-for="error in errors" :key="error">
+        <div v-for="message in error" :key="message">
+          <i class="error">{{ message }}</i
+          ><br />
         </div>
       </div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-    props: {
-        errorsArray: {
-            type: Array,
-            required: true,
-        }
-    }
+  props: {
+    errors: {
+      type: Object,
+      required: true
+    },
+  },
 }
 </script>

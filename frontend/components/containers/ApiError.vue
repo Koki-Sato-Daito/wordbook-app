@@ -1,6 +1,6 @@
 <template>
   <container-api-error
-     :errors-array="errorsArray"></container-api-error>
+     :errors="errors"></container-api-error>
 </template>
 
 <script>
@@ -11,8 +11,8 @@ export default {
     ContainerApiError,
   },
   props: {
-    errorsArray: {
-      type: Array,
+    errors: {
+      type: Object,
       required: true
     },
   },

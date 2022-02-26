@@ -1,6 +1,8 @@
 <template>
-  <div class="container mt-5 p-5">
-    <b-form @submit.prevent="onSubmit">
+  <div class="container">
+    <b-form @submit.prevent="onSubmit" class="login-form">
+      <h2>ログイン用紙</h2>
+      <br>
       <b-form-group label="メールアドレス:" label-for="email">
         <b-form-input
           id="email"
@@ -21,7 +23,7 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">ログイン</b-button>
+      <b-button type="submit" squared variant="primary">ログイン</b-button>
     </b-form>
   </div>
 </template>
@@ -63,3 +65,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.login-form {
+    background: linear-gradient(#dfdfdf 1px, transparent 1px) #fffbf2;
+    background-size: auto 2em;
+    padding: 64px;
+    min-height:100vh;
+}
+</style>

@@ -2,7 +2,7 @@
 <div>
   <br>
   <api-error
-     :errors-array="errors"
+     :errors="errors"
   ></api-error>
 
   <login
@@ -28,7 +28,7 @@ export default {
         email: '',
         password: '',
       },
-      errors: []
+      errors: {}
     }
   },
   methods: {
@@ -39,13 +39,16 @@ export default {
           email: this.form.email,
           password: this.form.password,
         })
-        .catch((error) => {
-          this.errors = error.response.data.non_field_errors
-          this.form.password = ''
-        })
         .then((response) => {
           this.$store.commit('authentication/setAuthData', response.data)
           this.$router.push('/languages')
+        })
+        .catch((error) => {
+          for (const property in error.response.data){
+              this.$set(this.errors, property, error.response.data[property])
+          }
+          console.log(this.errors)
+          this.form.password = ''
         })
     },
   },
