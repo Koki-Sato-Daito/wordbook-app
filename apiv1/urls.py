@@ -1,16 +1,19 @@
 from django.urls import path, include
 from rest_framework import routers
-from . import views
+from apiv1.views.accounts_views import TokenCreateView
+from apiv1.views.app_views import InitWordbookPageAPIView
+from apiv1.views.progress_views import ProgressViewSet
+from apiv1.views.words_view import MistakeWordAPIView
 
 router  = routers.SimpleRouter()
-router.register('', views.ProgressViewSet)
+router.register('', ProgressViewSet)
 
 app_name = 'apiv1'
 urlpatterns = [
-    path('auth/token/login/', views.TokenCreateView.as_view()),
+    path('auth/token/login/', TokenCreateView.as_view()),
     path('auth/', include('djoser.urls.authtoken')),
     
-    path('init_wordbook_page/', views.InitWordbookPageAPIView.as_view()),
-    path('users/<uuid:user_id>/mistake/', views.MistakeWordAPIView.as_view()),
+    path('init_wordbook_page/', InitWordbookPageAPIView.as_view()),
+    path('users/<uuid:user_id>/mistake/', MistakeWordAPIView.as_view()),
     path('progress/', include(router.urls)),
 ]
