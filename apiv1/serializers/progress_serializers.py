@@ -6,7 +6,8 @@ from progress.models import Progress
 class ProgressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Progress
-        fields = ['id', 'user', 'language', 'pos', 'mistake', 'index']
+        fields = ['id', 'user', 'language', 'pos',
+                  'mistake', 'index', 'correctAnswerCounter']
 
     def validate(self, validated_data):
         # 複合ユニーク制約のバリデーション
@@ -22,4 +23,4 @@ class ProgressSerializer(serializers.ModelSerializer):
                 'すでに進捗データが存在します。書き換えるには削除してください。'
                 f'Progress(user={user}, language={language}, pos={pos}, mistake={mistake}'
             )
-        return validated_data 
+        return validated_data

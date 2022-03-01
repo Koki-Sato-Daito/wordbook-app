@@ -14,7 +14,7 @@ class TestProgressViewSet(APITestCase):
     def setUpTestData(cls):
         cls.user = get_user_model().objects.get(email='test1@example.com')
         cls.progress = Progress.objects.create(
-            user=cls.user, language='python', pos='noun', mistake=False, index=100)
+            user=cls.user, language='python', pos='noun', mistake=False, index=100, correctAnswerCounter=10)
 
     # create
     def test_create_progress_insatnce(self):
@@ -24,7 +24,8 @@ class TestProgressViewSet(APITestCase):
             'language': 'java',
             'pos': 'verb',
             'mistake': False,
-            'index': 100
+            'index': 100,
+            'correctAnswerCounter': 10
         }
         response = self.client.post(self.TARGET_URL, params)
         self.assertEqual(response.status_code, 201)
@@ -36,7 +37,8 @@ class TestProgressViewSet(APITestCase):
             'language': 'FORTRAN',
             'pos': 'noun',
             'mistake': False,
-            'index': 100
+            'index': 100,
+            'correctAnswerCounter': 10
         }
         response = self.client.post(self.TARGET_URL, params)
         self.assertEqual(response.status_code, 400)
@@ -49,7 +51,8 @@ class TestProgressViewSet(APITestCase):
             'language': 'python',
             'pos': 'noun',
             'mistake': False,
-            'index': 100
+            'index': 100,
+            'correctAnswerCounter': 10
         }
         response = self.client.post(self.TARGET_URL, params)
         response = self.client.post(self.TARGET_URL, params)

@@ -1,12 +1,32 @@
 <template>
-  <containers-wordbook
-    :words="words"
-    :word-index="wordIndex"
-    @increment-word-index="incrementWordIndex"
-    @check-answer="storeUpMistakeWords"
-    @finish="finish"
-    @stop-studying="saveProgress"
-  ></containers-wordbook>
+  <div>
+    <containers-wordbook
+      :words="words"
+      :word-index="wordIndex"
+      @increment-word-index="incrementWordIndex"
+      @check-answer="checkAnswer"
+      @finish="finish"
+      @stop-studying="saveProgress"
+    ></containers-wordbook>
+
+    <b-modal id="finish-modal" centered modal-cancell title="結果発表">
+      <div class="text-center py-4">
+        <div v-if="score >= 60">
+          <h1 class="result">合格</h1>
+        </div>
+        <div v-else>
+          <h1 class="result">不合格</h1>
+        </div>
+        <br>
+        <p>正答率は</p>
+        <h3 class="score">{{ score }} %</h3>
+        <p>{{ words.length }}問中 {{ correctAnswerCounter }}問正解でした。</p>
+      </div>
+      <template #modal-footer="">
+        <b-button size="sm" variant="success" @click="confirmResult"> 確認しました </b-button>
+      </template>
+    </b-modal>
+  </div>
 </template>
 
 <script>
@@ -27,7 +47,13 @@ export default {
       wordIndex: 0,
       words: [],
       mistakenWords: [],
+      correctAnswerCounter: 0,
     }
+  },
+  computed: {
+    score() {
+      return Math.round((this.correctAnswerCounter / this.words.length) * 100)
+    },
   },
   created() {
     // get用のクエリパラメータを用意
@@ -47,6 +73,8 @@ export default {
         this.words = response.data.words
         if (response.data.progress) {
           this.wordIndex = response.data.progress.index
+          this.correctAnswerCounter =
+            response.data.progress.correctAnswerCounter
           this.deleteProgress(response.data.progress.id)
         }
       })
@@ -55,14 +83,17 @@ export default {
     incrementWordIndex() {
       this.wordIndex++
     },
-    storeUpMistakeWords(localIndex, isCorrect) {
-      if (!isCorrect) {
+    checkAnswer(localIndex, isCorrect) {
+      if (isCorrect) {
+        this.correctAnswerCounter++
+      } else {
         this.mistakenWords.push(this.words[localIndex].id)
       }
     },
     finish() {
       this.saveMistakenWords()
-      this.wordIndex=0
+      this.wordIndex = 0
+      this.$bvModal.show('finish-modal')
     },
     saveMistakenWords() {
       const data = {
@@ -80,12 +111,14 @@ export default {
     },
     saveProgress() {
       this.saveMistakenWords()
+      this.incrementWordIndex()
       const data = {
         language: this.language,
         pos: this.pos,
         mistake: false,
         user: this.user.id,
         index: this.wordIndex,
+        correctAnswerCounter: this.correctAnswerCounter,
       }
       this.$axios.post('/api/v1/progress/', data, {
         headers: {
@@ -100,6 +133,16 @@ export default {
         },
       })
     },
+    confirmResult() {
+      this.$router.push('/languages')
+    }
   },
 }
 </script>
+
+<style>
+.result {
+  font-weight: bold;
+  font-size: 2rem;
+}
+</style>

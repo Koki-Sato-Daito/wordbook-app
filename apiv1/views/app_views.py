@@ -40,7 +40,7 @@ class InitWordbookPageAPIView(views.APIView):
         progress = None
         if language and pos and user:
             try:
-                progress = Progress.objects.all().get(
+                progress = Progress.objects.get(
                     user=user, language=language, pos=pos, mistake=mistake)
             except Progress.DoesNotExist:
                 progress = None

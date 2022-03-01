@@ -44,8 +44,6 @@ export default {
     },
     finish() {
       this.$emit('finish')
-      alert('お疲れ様です！すべての問題が解き終わりました！！')
-      this.$router.push('/languages')
     },
     stopStudying() {
       this.$emit('check-answer', this.wordIndex, this.isCorrect);

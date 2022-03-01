@@ -62,6 +62,8 @@ export default {
     },
     finish() {
       this.saveCorrectWords()
+      alert('お疲れ様です！すべての問題が解き終わりました！！')
+      this.$router.push('/languages')
     },
     saveCorrectWords() {
       const data = {
