@@ -9,14 +9,11 @@
         </div>
         <h2>{{ words[wordIndex]['wordname'] }}</h2>
         <div v-if="isRevealed">
-          <h1 class="answer">{{ words[wordIndex]['meaning'] }}</h1>
+          <h3 class="answer">{{ words[wordIndex]['meaning'] }}</h3>
           <div class="mt-5">
-            <b-form-checkbox v-model="localCorrect"> 正解</b-form-checkbox>
-            <br />
-            <b-button variant="outline-light" @click.prevent.stop="stopStudying">進捗を保存して戻る</b-button>
-            <b-button variant="outline-light" @click.prevent.stop="moveOntoNextWord"
-              >次の単語へ</b-button
-            >
+            <b-button class="mr-4" variant="outline-light" @click.prevent.stop="stopStudying">セーブ</b-button>   
+            <b-button variant="outline-light" @click.prevent.stop="incorrect">不正解</b-button>
+            <b-button variant="light" @click.prevent.stop="correct">正解</b-button>
           </div>
         </div>
         <div v-else>
@@ -68,9 +65,13 @@ export default {
     toggleIsRevealed() {
       this.isRevealed = !this.isRevealed
     },
-    moveOntoNextWord() {
+    correct() {
       this.toggleIsRevealed()
-      this.$emit('move-onto-next-word')
+      this.$emit('correct')
+    },
+    incorrect() {
+      this.toggleIsRevealed()
+      this.$emit('incorrect')
     },
     stopStudying() {
       this.$emit("stop-studying")
@@ -85,7 +86,7 @@ export default {
   background-image: url('/images/black-board.png');
   background-repeat: no-repeat;
   background-size: cover;
-  height: 70vh;
+  height: 90vh;
   box-sizing: border-box;
   border: 4mm ridge hsl(36, 100%, 50%);
   color: aliceblue;

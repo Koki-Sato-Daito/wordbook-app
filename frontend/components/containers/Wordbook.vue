@@ -3,6 +3,8 @@
     :word-index="wordIndex"
     :words="words"
     :is-correct.sync="isCorrect"
+    @correct="correct"
+    @incorrect="incorrect"
     @move-onto-next-word="moveOntoNextWord"
     @stop-studying="stopStudying"
   ></presentational-wordbook>
@@ -33,6 +35,14 @@ export default {
   methods: {
     incrementWordIndex() {
       this.$emit('increment-word-index')
+    },
+    correct() {
+      this.isCorrect=true
+      this.moveOntoNextWord()
+    },
+    incorrect() {
+      this.isCorrect=false
+      this.moveOntoNextWord()
     },
     moveOntoNextWord() {
       this.$emit('check-answer', this.wordIndex, this.isCorrect);
