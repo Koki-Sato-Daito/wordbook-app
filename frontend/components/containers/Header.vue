@@ -1,6 +1,6 @@
 <template>
   <presentational-header
-    appname="ITエンジニアの英単語"
+    appname="ITエンジニア 英語検定"
     :authtoken="authToken"
     :userid="userData.id"
     :username="userData.username"

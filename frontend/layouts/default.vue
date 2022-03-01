@@ -2,9 +2,9 @@
     <body>
         <main>
             <Header />
-            <div class='container'>
+            <b-container>
                 <nuxt />
-            </div>
+            </b-container>
         </main>
     </body>
 </template>

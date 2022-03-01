@@ -4,7 +4,9 @@
       <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
 
       <b-navbar-brand
-        ><a class="link-button" href="">{{ appname }}</a></b-navbar-brand
+        ><nuxt-link to="/" class="link-button">{{
+          appname
+        }}</nuxt-link></b-navbar-brand
       >
 
       <b-collapse id="nav-text-collapse" is-nav>
@@ -65,5 +67,16 @@ export default {
   },
 }
 </script>
+
 <style>
+.link-button {
+  text-decoration: none;
+  color: white;
+}
+
+.link-button:hover {
+  text-decoration: none;
+  opacity: 0.7;
+  color: white;
+}
 </style>

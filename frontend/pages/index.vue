@@ -1,5 +1,6 @@
 <template>
-  <div id="top">
+    <b-row class="justify-content-center">
+      <b-col id="top" lg="9">
       <div class="title-box">
           <h5 class="fw-bold">☆ITエンジニア編☆</h5>
           <h1 class="text-center fw-bold title-text">英語</h1>
@@ -26,38 +27,38 @@
           </ul>
           <b-button class="my-3" variant="outline-danger" to="/login">学習を始める</b-button>
       </div>
-
+    <br>
       <p>現在、
           <ul>
-              <li>Python(https://www.python.org/)</li>
+              <li>Python</li>
+              <li>Java</li>
           </ul>
-          に対応しております。</p>
-  </div>
+          以上の言語に対応しております。</p>
+  </b-col>
+    </b-row>
 </template>
-<script>
 
-</script>
 <style>
 #top {
-    background: linear-gradient(#dfdfdf 1px, transparent 1px) #fffbf2;
-    background-size: auto 2em;
-    margin-top: 50px;
-    padding: 64px;
-    min-height:100vh;
+  background: linear-gradient(#dfdfdf 1px, transparent 1px) #fffbf2;
+  background-size: auto 2em;
+  margin-top: 50px;
+  padding: 64px;
+  min-height: 130vh;
 }
 
 .title-box {
-    padding: 40px;
+  padding: 40px;
 }
 .title-text {
-    font-size: 6rem;
+  font-size: 6rem;
 }
 
 .explain-text-box {
-    border: 3px solid black;
-    padding: 40px;
-    list-style-type: square;
-    font-size: 1.1rem;
+  border: 3px solid black;
+  padding: 40px;
+  list-style-type: square;
+  font-size: 1.1rem;
 }
 </style>
 
