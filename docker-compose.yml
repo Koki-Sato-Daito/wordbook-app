@@ -9,7 +9,7 @@ services:
     build:
       context: .
       dockerfile: ./dockerfiles/web/Dockerfile
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: python3 manage.py runserver 0.0.0.0:8000 --settings=config.settings.development
     volumes:
       - .:/code
     ports:
