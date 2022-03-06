@@ -113,3 +113,5 @@ USE_L10N = True
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ORIGIN_WHITELIST =  env.list('CORS_ORIGIN_WHITELIST')
