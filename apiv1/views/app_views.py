@@ -28,7 +28,7 @@ class InitWordbookPageAPIView(views.APIView):
         mistake = True if request.query_params.get(
             'mistake') == 'true' else False
 
-        words = Word.objects.all()
+        words = Word.objects.all().order_by('-freq')
         if language:
             words = words.filter(language=language)
         if pos:

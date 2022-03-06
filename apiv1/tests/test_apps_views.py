@@ -47,3 +47,12 @@ class TestInitWordbookPageAPIView(APITestCase):
         data = json.loads(response.content)
         self.assertEqual(len(data['words']), 0)
         self.assertEqual(data['progress'], None)
+
+    def test_words_order_is_descending(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            self.TARGET_URL + '?language=java&pos=noun')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data['words'][0]['freq'] > data['words'][1]['freq'])
+        self.assertTrue(data['words'][1]['freq'] > data['words'][2]['freq'])
