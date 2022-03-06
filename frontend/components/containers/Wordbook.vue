@@ -1,5 +1,6 @@
 <template>
   <presentational-wordbook
+    :before-fetch="beforeFetch"
     :word-index="wordIndex"
     :words="words"
     :is-correct.sync="isCorrect"
@@ -18,6 +19,10 @@ export default {
     PresentationalWordbook,
   },
   props: {
+    beforeFetch: {
+      type: Boolean,
+      required: true
+    },
     words: {
       type: Array,
       required: true,

@@ -1,5 +1,6 @@
 <template>
   <containers-wordbook
+    :before-fetch="beforeFetch"
     :word-index="wordIndex"
     :words="words"
     @increment-word-index="incrementWordIndex"
@@ -24,6 +25,7 @@ export default {
       user: this.$store.getters['authentication/userData'],
       authToken: this.$store.getters['authentication/authToken'],
 
+      beforeFetch: true,
       wordIndex: 0,
       words: [],
       correctWords: [],
@@ -46,6 +48,7 @@ export default {
       })
       .then((response) => {
         this.words = response.data.words
+        this.beforeFetch=false
       })
   },
   methods: {

@@ -2,7 +2,10 @@
   <div id="wordbook">
     <br />
     <div class="wordcard">
-      <div v-if="words.length && wordIndex < words.length" class="text-center py-5 mb-5">
+      <div v-if="beforeFetch" class="text-center mt-5 pt-5">
+        <div class="spinner-border text-light"></div>
+      </div>
+      <div v-else-if="words.length && wordIndex < words.length" class="text-center py-5 mb-5">
         <div>{{ wordIndex+1 }}/{{ words.length }}</div>
         <div class="mt-3 mb-5">
           <span>出現回数: {{ words[wordIndex]['freq'] }}</span>
@@ -33,6 +36,10 @@
 <script>
 export default {
   props: {
+    beforeFetch: {
+      type: Boolean,
+      required: true
+    },
     wordIndex: {
       type: Number,
       required: true,
