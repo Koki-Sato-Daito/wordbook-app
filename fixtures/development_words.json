@@ -1,0 +1,460 @@
+[
+    {
+        "model": "wordbook.Word",
+        "pk": 1,
+        "fields": {
+            "wordname": "apple",
+            "meaning": "りんご",
+            "pos": "noun",
+            "language": "python",
+            "freq": "1000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 2,
+        "fields": {
+            "wordname": "banana",
+            "meaning": "バナナ",
+            "pos": "noun",
+            "language": "python",
+            "freq": "900"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 3,
+        "fields": {
+            "wordname": "orange",
+            "meaning": "オレンジ",
+            "pos": "noun",
+            "language": "python",
+            "freq": "800"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 4,
+        "fields": {
+            "wordname": "melon",
+            "meaning": "メロン",
+            "pos": "noun",
+            "language": "python",
+            "freq": "700"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 5,
+        "fields": {
+            "wordname": "grape",
+            "meaning": "ブドウ",
+            "pos": "noun",
+            "language": "python",
+            "freq": "600"
+        }
+    },
+
+    {
+        "model": "wordbook.Word",
+        "pk": 6,
+        "fields": {
+            "wordname": "go",
+            "meaning": "行く",
+            "pos": "verb",
+            "language": "python",
+            "freq": "1000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 7,
+        "fields": {
+            "wordname": "walk",
+            "meaning": "歩く",
+            "pos": "verb",
+            "language": "python",
+            "freq": "900"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 8,
+        "fields": {
+            "wordname": "put",
+            "meaning": "置く",
+            "pos": "verb",
+            "language": "python",
+            "freq": "800"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 9,
+        "fields": {
+            "wordname": "wait",
+            "meaning": "待つ",
+            "pos": "verb",
+            "language": "python",
+            "freq": "700"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 10,
+        "fields": {
+            "wordname": "ask",
+            "meaning": "たずねる",
+            "pos": "verb",
+            "language": "python",
+            "freq": "600"
+        }
+    },
+
+    {
+        "model": "wordbook.Word",
+        "pk": 11,
+        "fields": {
+            "wordname": "big",
+            "meaning": "大きい",
+            "pos": "adjective",
+            "language": "python",
+            "freq": "1000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 12,
+        "fields": {
+            "wordname": "young",
+            "meaning": "若い",
+            "pos": "adjective",
+            "language": "python",
+            "freq": "900"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 13,
+        "fields": {
+            "wordname": "cool",
+            "meaning": "かっこいい",
+            "pos": "adjective",
+            "language": "python",
+            "freq": "800"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 14,
+        "fields": {
+            "wordname": "round",
+            "meaning": "まるい",
+            "pos": "adjective",
+            "language": "python",
+            "freq": "700"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 15,
+        "fields": {
+            "wordname": "Japanese",
+            "meaning": "日本の",
+            "pos": "adjective",
+            "language": "python",
+            "freq": "600"
+        }
+    },
+
+    {
+        "model": "wordbook.Word",
+        "pk": 16,
+        "fields": {
+            "wordname": "before",
+            "meaning": "前に",
+            "pos": "adverb",
+            "language": "python",
+            "freq": "1000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 17,
+        "fields": {
+            "wordname": "foreever",
+            "meaning": "永久に",
+            "pos": "adverb",
+            "language": "python",
+            "freq": "900"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 18,
+        "fields": {
+            "wordname": "tomorrow",
+            "meaning": "明日に",
+            "pos": "adverb",
+            "language": "python",
+            "freq": "800"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 19,
+        "fields": {
+            "wordname": "soon",
+            "meaning": "すぐに",
+            "pos": "adverb",
+            "language": "python",
+            "freq": "700"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 20,
+        "fields": {
+            "wordname": "often",
+            "meaning": "しばしば",
+            "pos": "adverb",
+            "language": "python",
+            "freq": "600"
+        }
+    },
+
+    {
+        "model": "wordbook.Word",
+        "pk": 21,
+        "fields": {
+            "wordname": "apple",
+            "meaning": "りんご",
+            "pos": "noun",
+            "language": "java",
+            "freq": "1000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 22,
+        "fields": {
+            "wordname": "banana",
+            "meaning": "バナナ",
+            "pos": "noun",
+            "language": "java",
+            "freq": "900"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 23,
+        "fields": {
+            "wordname": "orange",
+            "meaning": "オレンジ",
+            "pos": "noun",
+            "language": "java",
+            "freq": "800"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 24,
+        "fields": {
+            "wordname": "melon",
+            "meaning": "メロン",
+            "pos": "noun",
+            "language": "java",
+            "freq": "700"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 25,
+        "fields": {
+            "wordname": "grape",
+            "meaning": "ブドウ",
+            "pos": "noun",
+            "language": "java",
+            "freq": "600"
+        }
+    },
+
+    {
+        "model": "wordbook.Word",
+        "pk": 26,
+        "fields": {
+            "wordname": "go",
+            "meaning": "行く",
+            "pos": "verb",
+            "language": "java",
+            "freq": "1000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 27,
+        "fields": {
+            "wordname": "walk",
+            "meaning": "歩く",
+            "pos": "verb",
+            "language": "java",
+            "freq": "900"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 28,
+        "fields": {
+            "wordname": "put",
+            "meaning": "置く",
+            "pos": "verb",
+            "language": "java",
+            "freq": "800"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 29,
+        "fields": {
+            "wordname": "wait",
+            "meaning": "待つ",
+            "pos": "verb",
+            "language": "java",
+            "freq": "700"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 30,
+        "fields": {
+            "wordname": "ask",
+            "meaning": "たずねる",
+            "pos": "verb",
+            "language": "java",
+            "freq": "600"
+        }
+    },
+
+    {
+        "model": "wordbook.Word",
+        "pk": 31,
+        "fields": {
+            "wordname": "big",
+            "meaning": "大きい",
+            "pos": "adjective",
+            "language": "java",
+            "freq": "1000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 32,
+        "fields": {
+            "wordname": "young",
+            "meaning": "若い",
+            "pos": "adjective",
+            "language": "java",
+            "freq": "900"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 33,
+        "fields": {
+            "wordname": "cool",
+            "meaning": "かっこいい",
+            "pos": "adjective",
+            "language": "java",
+            "freq": "800"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 34,
+        "fields": {
+            "wordname": "round",
+            "meaning": "まるい",
+            "pos": "adjective",
+            "language": "java",
+            "freq": "700"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 35,
+        "fields": {
+            "wordname": "Japanese",
+            "meaning": "日本の",
+            "pos": "adjective",
+            "language": "java",
+            "freq": "600"
+        }
+    },
+
+    {
+        "model": "wordbook.Word",
+        "pk": 36,
+        "fields": {
+            "wordname": "before",
+            "meaning": "前に",
+            "pos": "adverb",
+            "language": "java",
+            "freq": "1000"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 37,
+        "fields": {
+            "wordname": "foreever",
+            "meaning": "永久に",
+            "pos": "adverb",
+            "language": "java",
+            "freq": "900"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 38,
+        "fields": {
+            "wordname": "tomorrow",
+            "meaning": "明日に",
+            "pos": "adverb",
+            "language": "java",
+            "freq": "800"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 39,
+        "fields": {
+            "wordname": "soon",
+            "meaning": "すぐに",
+            "pos": "adverb",
+            "language": "java",
+            "freq": "700"
+        }
+    },
+    {
+        "model": "wordbook.Word",
+        "pk": 40,
+        "fields": {
+            "wordname": "often",
+            "meaning": "しばしば",
+            "pos": "adverb",
+            "language": "java",
+            "freq": "600"
+        }
+    },
+
+    {
+        "model": "accounts.User",
+        "fields": {
+            "username": "guestuser",
+            "email": "guestuser@example.com",
+            "password": "pass12345",
+            "is_staff": "False",
+            "is_active": "True"
+        }
+    }
+]
