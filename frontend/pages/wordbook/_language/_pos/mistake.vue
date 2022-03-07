@@ -31,7 +31,11 @@ export default {
       correctWords: [],
     }
   },
-  
+  head() {
+    return {
+      title: "復習ページ"
+    }
+  },
   created() {
     const q = {
       language: this.language,

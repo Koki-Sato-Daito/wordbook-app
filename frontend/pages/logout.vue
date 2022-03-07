@@ -15,5 +15,10 @@ export default {
         redirect('/')
       })
   },
+  head() {
+    return {
+      title: "ログアウト"
+    }
+  }
 }
 </script>

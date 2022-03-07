@@ -52,6 +52,11 @@ export default {
       correctAnswerCounter: 0,
     }
   },
+  head() {
+    return {
+      title: "試験ページ"
+    }
+  },
   computed: {
     score() {
       return Math.round((this.correctAnswerCounter / this.words.length) * 100)

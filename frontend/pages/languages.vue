@@ -17,6 +17,11 @@ export default {
   components: {
     SelectLanguage,
   },
+  head() {
+    return {
+      title: "コース選択"
+    }
+  },
   computed: {
     ...mapGetters({ items: 'wordbookMeta/items' }),
   },

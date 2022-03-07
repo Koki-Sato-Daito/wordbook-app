@@ -15,5 +15,10 @@ export default {
       redirect('/languages')
     }
   },
+  head() {
+    return {
+      title: "サインアップ"
+    }
+  }
 }
 </script>

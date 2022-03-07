@@ -38,6 +38,17 @@
     </b-row>
 </template>
 
+<script>
+export default {
+  head() {
+    return {
+      title: "トップページ"
+    }
+  }
+}
+</script>
+
+
 <style>
 #top {
   background: linear-gradient(#dfdfdf 1px, transparent 1px) #fffbf2;
