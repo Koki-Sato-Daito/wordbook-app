@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from wordbook.models import Word
 from apiv1.serializers.words_serializers import UserMistakeSerializer
+from apiv1.permissions import OwnerPermission
 
 
 class WordFilter(filters.FilterSet):
@@ -20,10 +21,12 @@ class WordFilter(filters.FilterSet):
 
 
 class MistakeWordAPIView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, OwnerPermission]
     serializer_class = UserMistakeSerializer
 
     def post(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(get_user_model(), id=user_id)
+        self.check_object_permissions(request, user)
         serializer = UserMistakeSerializer(
             data=request.data, context={'user_id': user_id})
         serializer.is_valid(raise_exception=True)
@@ -32,6 +35,7 @@ class MistakeWordAPIView(generics.GenericAPIView):
 
     def patch(self, request, user_id, *args, **kwargs):
         user = get_object_or_404(get_user_model(), id=user_id)
+        self.check_object_permissions(request, user)
         serializer = UserMistakeSerializer(user,
                                            data=request.data, partial=True, context={'user_id': user.id})
         serializer.is_valid(raise_exception=True)
@@ -40,5 +44,6 @@ class MistakeWordAPIView(generics.GenericAPIView):
 
     def delete(self, request, user_id, *args, **kwargs):
         user = get_object_or_404(get_user_model(), id=user_id)
+        self.check_object_permissions(request, user)
         user.mistake_words.clear()
         return Response(status=status.HTTP_204_NO_CONTENT)

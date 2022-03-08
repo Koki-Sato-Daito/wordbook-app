@@ -1,8 +1,11 @@
-from rest_framework import mixins, viewsets
+from django.contrib.auth import get_user_model
+from rest_framework import mixins, status, viewsets
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from progress.models import Progress
 from apiv1.serializers.progress_serializers import ProgressSerializer
+from apiv1.permissions import OwnerPermission
 
 
 class ProgressViewSet(mixins.CreateModelMixin,
@@ -10,4 +13,17 @@ class ProgressViewSet(mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
     queryset = Progress.objects.all()
     serializer_class = ProgressSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, OwnerPermission]
+
+    def create(self, request, *args, **kwargs):
+        user = get_user_model().objects.get(id=request.data['user'])
+        self.check_object_permissions(request, user)
+        return super().create(request, *args, **kwargs)
+
+    def destroy(self, request,  pk, *args, **kwargs):
+        instance = Progress.objects.get(pk=pk)
+        user = instance.user
+        self.check_object_permissions(request, user)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        

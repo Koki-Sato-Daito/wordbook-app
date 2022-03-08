@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
 from wordbook.models import Word
@@ -23,7 +24,8 @@ class TestMistakeWordAPIView(APITestCase):
 
     # post
     def test_user_register_mistske_words_correctly(self):
-        self.client.force_authenticate(user=self.user)
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         params = {
             "mistakes": {1, 2, 3}
         }
@@ -42,7 +44,8 @@ class TestMistakeWordAPIView(APITestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_user_register_mistake_words_correctly(self):
-        self.client.force_authenticate(user=self.user)
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         params = {
             "mistakes": {1, 2, 3}
         }
@@ -53,7 +56,8 @@ class TestMistakeWordAPIView(APITestCase):
         self.assertEqual(len(data['words']), 3)
 
     def test_user_cannot_register_with_invalid_params(self):
-        self.client.force_authenticate(user=self.user)
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         params = {
             "mistakes": {10000}
         }
@@ -61,10 +65,22 @@ class TestMistakeWordAPIView(APITestCase):
             self.TARGET_URL, params)
         self.assertEqual(response.status_code, 400)
 
+    def test_cannot_register_with_invalid_auth_token(self):
+        user2 = get_user_model().objects.get(username='test2')
+        token = Token.objects.create(user=user2)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        params = {
+            "mistakes": {1}
+        }
+        response = self.client.post(
+            self.TARGET_URL, params)
+        self.assertEqual(response.status_code, 403)
+
     # update
     def test_user_remove_mistake_simple_word_correctly(self):
         self.user.mistake_words.add(self.word1, self.word2)
-        self.client.force_authenticate(user=self.user)
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         params = {
             "mistakes": {1}
         }
@@ -75,7 +91,8 @@ class TestMistakeWordAPIView(APITestCase):
 
     def test_user_remove_mistake_mutiple_words_correctly(self):
         self.user.mistake_words.add(self.word1, self.word2)
-        self.client.force_authenticate(user=self.user)
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         params = {
             "mistakes": {1,2}
         }
@@ -85,19 +102,38 @@ class TestMistakeWordAPIView(APITestCase):
 
     def test_should_return_error_when_invalid_params(self):
         self.user.mistake_words.add(self.word1, self.word2)
-        self.client.force_authenticate(user=self.user)
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         params = {
             "mistakes": {1000000}
         }
         response = self.client.patch(self.TARGET_URL, params)
         self.assertEqual(response.status_code, 400)
 
+    def test_cannot_update_with_invalid_auth_token(self):
+        user2 = get_user_model().objects.get(username='test2')
+        token = Token.objects.create(user=user2)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        params = {
+            "mistakes": {1}
+        }
+        response = self.client.patch(self.TARGET_URL, params)
+        self.assertEqual(response.status_code, 403)
+
     # delete
     def test_user_delete_mistake_words_correctly(self):
-        self.client.force_authenticate(user=self.user)
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         response = self.client.delete(self.TARGET_URL)
         self.assertEqual(response.status_code, 204)
 
     def test_return_401_if_without_login(self):
         response = self.client.delete(self.TARGET_URL)
         self.assertEqual(response.status_code, 401)
+
+    def test_cannot_delete_with_invalid_auth_token(self):
+        user2 = get_user_model().objects.get(username='test2')
+        token = Token.objects.create(user=user2)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = self.client.delete(self.TARGET_URL)
+        self.assertEqual(response.status_code, 403)
