@@ -1,7 +1,7 @@
 <template>
   <b-row class="justify-content-center">
     <b-col lg="9">
-      <b-form @submit.prevent="onSubmit" class="login-form">
+      <b-form class="login-form" @submit.prevent="onSubmit">
         <h2>ログイン用紙</h2>
         <br />
         <b-form-group label="メールアドレス:" label-for="email">
@@ -25,6 +25,13 @@
         </b-form-group>
 
         <b-button type="submit" squared variant="primary">提出</b-button>
+        <b-button
+          type="submit"
+          squared
+          variant="success"
+          @click.prevent="guestLogin"
+          >ゲストアカウントでログインする</b-button
+        >
       </b-form>
     </b-col>
   </b-row>
@@ -64,6 +71,9 @@ export default {
     onSubmit(event) {
       this.$emit('login', event)
     },
+    guestLogin(event) {
+      this.$emit('guest-login', event)
+    }
   },
 }
 </script>

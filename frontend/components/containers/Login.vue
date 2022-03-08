@@ -8,7 +8,8 @@
   <login
     :email.sync="form.email"
     :password.sync="form.password"
-    @login.prevent.stop="login"
+    @login="login"
+    @guest-login="guestLogin"
   ></login>
 </div>
 </template>
@@ -47,10 +48,17 @@ export default {
           for (const property in error.response.data){
               this.$set(this.errors, property, error.response.data[property])
           }
-          console.log(this.errors)
           this.form.password = ''
         })
     },
+    guestLogin(event) {
+      event.preventDefault()
+      this.$axios.post('/api/v1/guest_login/')
+      .then((response) => {
+        this.$store.commit('authentication/setAuthData', response.data)
+        this.$router.push('/languages')
+      })
+    }
   },
 }
 </script>
