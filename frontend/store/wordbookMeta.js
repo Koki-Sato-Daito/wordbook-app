@@ -2,6 +2,16 @@ const state = () => ({
     items: [
         {
             id: 1,
+            name: 'お試し厳選10問',
+            language: 'trial',
+            pos: {
+                '問題': 'any',
+            },
+            imgUrl: '/images/trial.png',
+            officialUrl: '',
+        },
+        {
+            id: 2,
             name: 'Python',
             language: 'python',
             pos: {
@@ -14,7 +24,7 @@ const state = () => ({
             officialUrl: 'https://www.python.org/',
         },
         {
-            id: 2,
+            id: 3,
             name: 'Java',
             language: 'java',
             pos: {

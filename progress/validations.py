@@ -11,6 +11,6 @@ def validate_language(language):
 
 
 def validate_pos(pos):
-    pos_list = ['noun', 'verb', 'adjective', 'adverb']
+    pos_list = ['noun', 'verb', 'adjective', 'adverb', 'any']
     if not pos in pos_list:
         raise ValidationError(f'{pos}という品詞には対応していません。')
