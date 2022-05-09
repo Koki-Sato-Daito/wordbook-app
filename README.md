@@ -88,11 +88,12 @@ BASE_URL=http://localhost:8000
 $ docker-compose up --build -d
 ```
 
-- マイグレーション、管理アカウント作成
+- マイグレーション、管理アカウント作成、サーバ起動
 
 ```
 $ docker-compose exec web python3 manage.py migrate --settings=config.settings.development
 $ docker-compose exec web python3 manage.py createsuperuser --settings=config.settings.development
+$ docker-compose exec web python3 manage.py runserver 0.0.0.0:8000 --settings=config.settings.development
 ```
 
 - http://localhost:3000にアクセス可能できます。

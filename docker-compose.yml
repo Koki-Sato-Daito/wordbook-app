@@ -5,13 +5,16 @@ services:
     image: postgres:12.10
     environment:
       POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
   web:
     build:
       context: .
       dockerfile: ./dockerfiles/web/Dockerfile
-    command: python3 manage.py runserver 0.0.0.0:8000 --settings=config.settings.development
+    # command: python3 manage.py runserver 0.0.0.0:8000 --settings=config.settings.development
     volumes:
       - .:/code
+    tty: true
     ports:
       - "8000:8000"
     depends_on:
