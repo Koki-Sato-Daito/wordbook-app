@@ -35,7 +35,7 @@ import ContainersWordbook from '@/components/containers/Wordbook'
 
 export default {
   components: {
-    ContainersWordbook,
+    ContainersWordbook
   },
   data() {
     return {
