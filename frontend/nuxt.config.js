@@ -70,8 +70,8 @@ export default {
       const routes = [];
       routes.push("/wordbook/trial/any/");
 
-      languages = ["python", "java"]
-      posList = ["noun", "verb", "adverb", "adjective"]
+      const languages = ["python", "java"]
+      const posList = ["noun", "verb", "adverb", "adjective"]
       for (const language of languages) {
         for (const pos of posList) {
           routes.push(`/wordbook/${language}/${pos}/`);
