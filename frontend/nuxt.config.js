@@ -63,4 +63,21 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  // 動的ルーティングをgenerateコマンドで適用させる
+  generate: {
+    routes: function() {
+      const routes = [];
+      routes.push("/wordbook/trial/any/");
+
+      languages = ["python", "java"]
+      posList = ["noun", "verb", "adverb", "adjective"]
+      for (const language of languages) {
+        for (const pos of posList) {
+          routes.push(`/wordbook/${language}/${pos}/`);
+        }
+      }
+      return routes;
+    }
+  }
 }
