@@ -86,6 +86,9 @@ export default {
         }
         this.beforeFetch=false
       })
+      .catch(() => {
+        this.$router.push("/");
+      })
   },
   methods: {
     incrementWordIndex() {

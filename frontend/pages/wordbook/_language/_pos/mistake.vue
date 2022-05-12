@@ -54,6 +54,9 @@ export default {
         this.words = response.data.words
         this.beforeFetch=false
       })
+      .catch(() => {
+        this.$router.push("/");
+      })
   },
   methods: {
     incrementWordIndex() {
