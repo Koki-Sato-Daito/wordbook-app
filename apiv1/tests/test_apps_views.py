@@ -25,6 +25,7 @@ class TestInitWordbookPageAPIView(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(self.TARGET_URL + '?language=java&pos=noun')
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['content-type'], 'application/json')
         data = json.loads(response.content)
         self.assertEqual(len(data['words']), 3)
 

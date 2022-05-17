@@ -32,6 +32,7 @@ class TestMistakeWordAPIView(APITestCase):
         response = self.client.post(
             self.TARGET_URL, params)
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response['content-type'], 'application/json')
         data = json.loads(response.content)
         self.assertEqual(len(data['words']), 3)
 
@@ -86,6 +87,7 @@ class TestMistakeWordAPIView(APITestCase):
         }
         response = self.client.patch(self.TARGET_URL, params)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['content-type'], 'application/json')
         self.assertEqual(len(response.data['words']), 1)
         self.assertEqual(response.data['words'][0]['id'], 2)
 

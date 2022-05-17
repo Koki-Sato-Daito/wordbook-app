@@ -31,6 +31,7 @@ class TestProgressViewSet(APITestCase):
         }
         response = self.client.post(self.TARGET_URL, params)
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response['content-type'], 'application/json')
 
     def test_cannot_create_progress_insatnce_with_invalid_data(self):
         token = Token.objects.create(user=self.user)
