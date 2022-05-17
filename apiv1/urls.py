@@ -1,9 +1,10 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 from apiv1.views.accounts_views import TokenCreateView, GuestLoginAPIView
 from apiv1.views.app_views import InitWordbookPageAPIView
 from apiv1.views.progress_views import ProgressViewSet
 from apiv1.views.words_view import MistakeWordAPIView
+from apiv1.views.not_found_views import NotFoundAPIView
 
 router  = routers.SimpleRouter()
 router.register('', ProgressViewSet)
@@ -18,4 +19,5 @@ urlpatterns = [
     path('init_wordbook_page/', InitWordbookPageAPIView.as_view()),
     path('users/<uuid:user_id>/mistake/', MistakeWordAPIView.as_view()),
     path('progress/', include(router.urls)),
+    re_path(r'', NotFoundAPIView.as_view())
 ]
