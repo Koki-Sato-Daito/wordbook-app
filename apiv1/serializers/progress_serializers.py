@@ -7,7 +7,7 @@ class ProgressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Progress
         fields = ['id', 'user', 'language', 'pos',
-                  'mistake', 'index', 'correctAnswerCounter']
+                  'mistake', 'index', 'correct_answer_counter']
 
     def validate(self, validated_data):
         # 複合ユニーク制約のバリデーション

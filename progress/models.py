@@ -16,7 +16,7 @@ class Progress(models.Model):
                            validators=[validate_pos])
     mistake = models.BooleanField('不正解', null=False)
     index = models.IntegerField('インデックス', null=False)
-    correctAnswerCounter = models.IntegerField('正解数', null=False)
+    correct_answer_counter = models.IntegerField('正解数', null=False)
 
     class Meta:
         db_table = 'progress'

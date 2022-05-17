@@ -15,7 +15,7 @@ class TestInitWordbookPageAPIView(APITestCase):
     def setUpTestData(cls):
         cls.user = get_user_model().objects.get(email='test1@example.com')
         Progress.objects.create(
-            language='java', pos='noun', user=cls.user, mistake=False, index=100, correctAnswerCounter=10)
+            language='java', pos='noun', user=cls.user, mistake=False, index=100, correct_answer_counter=10)
 
     def test_cannot_return_data_without_login(self):
         response = self.client.get(self.TARGET_URL + '?language=java&pos=noun')
@@ -35,6 +35,7 @@ class TestInitWordbookPageAPIView(APITestCase):
             self.TARGET_URL + '?language=java&pos=noun&mistake=false&user=' + str(self.user.id))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
+        # print(data)
         self.assertEqual(len(data['words']), 3)
         self.assertEqual(data['progress']['index'], 100)
         self.assertEqual(data['progress']['correctAnswerCounter'], 10)

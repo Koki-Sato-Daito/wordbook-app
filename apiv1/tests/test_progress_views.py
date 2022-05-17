@@ -15,7 +15,7 @@ class TestProgressViewSet(APITestCase):
     def setUpTestData(cls):
         cls.user = get_user_model().objects.get(email='test1@example.com')
         cls.progress = Progress.objects.create(
-            user=cls.user, language='python', pos='noun', mistake=False, index=100, correctAnswerCounter=10)
+            user=cls.user, language='python', pos='noun', mistake=False, index=100, correct_answer_counter=10)
 
     # create
     def test_create_progress_insatnce(self):

@@ -14,7 +14,7 @@ class TestInitWordbookPageSerializer(APITestCase):
     def setUpTestData(cls):
         cls.user = get_user_model().objects.get(username='test1')
         Progress.objects.create(
-            user=cls.user, language='java', pos='noun', mistake=False, index=100, correctAnswerCounter=10)
+            user=cls.user, language='java', pos='noun', mistake=False, index=100, correct_answer_counter=10)
 
     def test_serialize_progress_correctly(self):
         words = Word.objects.filter(language='java', pos='noun')
@@ -23,4 +23,4 @@ class TestInitWordbookPageSerializer(APITestCase):
         serializer = InitWordbookPageSerializer(instance=instance)
         self.assertEqual(len(serializer.data['words']), 3)
         self.assertEqual(serializer.data['progress']['index'], 100)
-        self.assertEqual(serializer.data['progress']['correctAnswerCounter'], 10)
+        self.assertEqual(serializer.data['progress']['correct_answer_counter'], 10)
