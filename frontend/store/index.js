@@ -3,7 +3,7 @@ const actions = {
         try{
             const keys = JSON.parse(localStorage.getItem("wordbook"));
             const payload = {}
-            payload.auth_token = keys.authentication.authToken;
+            payload.authToken = keys.authentication.authToken;
             
             payload.user = {}
             payload.user.id = keys.authentication.userData.id;

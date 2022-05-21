@@ -36,7 +36,7 @@ const actions = {
 // mutations
 const mutations = {
     setAuthData(state, payload) {
-        state.authToken = payload.auth_token;
+        state.authToken = payload.authToken;
         state.userData.id = payload.user.id;
         state.userData.username = payload.user.username;
         state.userData.email = payload.user.email;
