@@ -10,6 +10,12 @@ from apiv1.serializers.words_serializers import UserMistakeSerializer
 from apiv1.permissions import OwnerPermission
 
 
+""""TODO
+WordFilterをviewsから移動
+MistakeWordAPIViewのエンドポイントを再考
+APIドキュメントの生成
+"""
+
 class WordFilter(filters.FilterSet):
     language = filters.CharFilter(field_name='language')
     pos = filters.CharFilter(field_name='pos')

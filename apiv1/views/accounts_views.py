@@ -9,6 +9,9 @@ from accounts.user_data import UserData
 from ..patch import CustomTokenSerializer
 
 
+"""TODO
+responseのauh_tokenがスネークケースなので修正
+"""
 class GuestLoginAPIView(views.APIView):
     @extend_schema(
         description="ゲストログイン用のエンドポイントです。ゲストアカウントを生成してユーザデータを返します。",

@@ -13,6 +13,11 @@ from apiv1.views.words_view import WordFilter
 
 
 class InitWordbookPageAPIView(views.APIView):
+    """TODO
+    InitWordbookPageAPIViewのリファクタリング
+    FatViewの解消
+    ドキュメント生成処理の追加
+    """
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
