@@ -29,9 +29,11 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'accounts.apps.AccountsConfig',
-    'apiv1.apps.Apiv1Config',
     'wordbook.apps.WordbookConfig',
-    'progress.apps.ProgressConfig'
+    'progress.apps.ProgressConfig',
+    'apiv1.apps.Apiv1Config',
+
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -96,6 +98,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication'
@@ -108,7 +111,15 @@ REST_FRAMEWORK = {
         'djangorestframework_camel_case.parser.CamelCaseFormParser',
         'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-    )
+    ),
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'ITエンジニア英語試験API',
+    'DESCRIPTION': 'ITエンジニア英語試験のAPIドキュメントです。',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': r'/api/v1/'
 }
 
 LANGUAGE_CODE = 'ja'
