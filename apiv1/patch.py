@@ -8,12 +8,11 @@ class CustomTokenSerializer(djoser.serializers.TokenSerializer):
         model = djoser.conf.settings.TOKEN_MODEL
         fields = ("auth_token", "user")
 
-"""TODO
-responseのauh_tokenがスネークケースなので修正
-"""
+
 @extend_schema(
-    description="ログイン用のエンドポイントです。\
-        デフォルトのdjoserのログインエンドポイントとレスポンスが変わっているため注意してください。",
+    description="ログイン用のエンドポイントです。\n\n\
+        デフォルトのdjoserのログインエンドポイントとレスポンスが変わっているため注意してください。\n\n\
+        また、Responseのauth_tokenキーについて、実際のキーはキャメルケースのauthTokenであることに注意してください。",
     responses={201: CustomTokenSerializer}
 )
 class CustomTokenCreateView(djoser.views.TokenCreateView):
