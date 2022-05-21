@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 
 
 class TestGuestLoginAPIView(APITestCase):
-    TARGET_URL = '/api/v1/guest_login/'
+    TARGET_URL = '/api/v1/auth/guest_login/'
 
     def test_return_201(self):
         response = self.client.post(self.TARGET_URL)

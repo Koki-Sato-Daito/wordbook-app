@@ -1,9 +1,13 @@
+import datetime
+import random
+import string
 import uuid
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -75,3 +79,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     @ property
     def is_superuser(self):
         return self.is_staff
+
+    @classmethod
+    def create_guest_account(cls):
+        now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        random_str = ''.join(
+            [random.choice(string.ascii_letters + string.digits) for i in range(10)])
+        email_text = random_str + '-' + now + '@example.com'
+        user = get_user_model().objects.create_user(
+            email=email_text, username="ゲスト", password="pass123")
+        return user

@@ -1,8 +1,9 @@
+import djoser
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
-from apiv1.serializers.accounts_serializers import TokenSerializer
+from accounts.user_data import UserData
 
 
 class TestTokenSerializer(APITestCase):
@@ -15,12 +16,7 @@ class TestTokenSerializer(APITestCase):
 
     def test_serialize(self):
         token = Token('abcdefg')
-        user_data = {
-            'id': self.user.id,
-            'username': self.user.username,
-            'email': self.user.email,
-        }
-        serializer = TokenSerializer(
-            token, context={'user': user_data})
+        data = UserData(token, self.user)
+        serializer = djoser.serializers.TokenSerializer(data)
         self.assertEqual(serializer.data['auth_token'], token.key)
-        self.assertEqual(serializer.data['user']['id'], self.user.id)
+        self.assertEqual(serializer.data['user']['id'], str(self.user.id))

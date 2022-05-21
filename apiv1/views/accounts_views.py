@@ -1,62 +1,26 @@
-import datetime
-import random
-import string
-
-from djoser import utils
-from djoser.conf import settings
 from django.contrib.auth import get_user_model
-from djoser.views import TokenCreateView
-from rest_framework import status
-from rest_framework import generics
-from rest_framework.exceptions import PermissionDenied
+import djoser
+from djoser import utils
+from drf_spectacular.utils import extend_schema
+from rest_framework import status, views
 from rest_framework.response import Response
 
-from apiv1.serializers.accounts_serializers import TokenSerializer
+from accounts.user_data import UserData
+from ..patch import CustomTokenSerializer
 
 
-class TokenCreateView(TokenCreateView):
-    def _action(self, serializer):
-        try:
-            settings.TOKEN_MODEL.objects.get(user=serializer.user.id)
-            raise PermissionDenied(
-                detail={"errors": ["このユーザは他の端末でログインされています。ログアウトしてからお試しください。"]})
-        except settings.TOKEN_MODEL.DoesNotExist:
-            token = utils.login_user(self.request, serializer.user)
-            user = serializer.user
-            user_data = {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email
-            }
-            token_serializer_class = TokenSerializer(
-                token,
-                context={'user': user_data}
-            )
-            return Response(
-                data=token_serializer_class.data,
-                status=status.HTTP_200_OK
-            )
-
-
-class GuestLoginAPIView(generics.CreateAPIView):
-    def create(self, request, *args, **kwargs):
-        now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        random_str = ''.join(
-            [random.choice(string.ascii_letters + string.digits) for i in range(10)])
-        email_text = random_str + '-' + now + '@example.com'
-        user = get_user_model().objects.create_user(
-            email=email_text, username="ゲスト", password="pass123")
+class GuestLoginAPIView(views.APIView):
+    @extend_schema(
+        description="ゲストログイン用のエンドポイントです。ゲストアカウントを生成してユーザデータを返します。",
+        responses={201: CustomTokenSerializer}
+    )
+    def post(self, request):
+        User = get_user_model()
+        user = User.create_guest_account()
 
         token = utils.login_user(request, user)
-        user_data = {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email
-        }
-        serializer = TokenSerializer(
-            token,
-            context={'user': user_data}
-        )
+        data = UserData(token, user)
+        serializer = djoser.serializers.TokenSerializer(data)
         return Response(
                 data=serializer.data,
                 status=status.HTTP_201_CREATED

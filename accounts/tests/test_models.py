@@ -36,3 +36,7 @@ class UserModelTests(TestCase):
     def test_cannot_create_user_with_invalid_email(self):
         with self.assertRaises(ValidationError):
             User.objects.create_user('testuser', 'test.example.com', 'password')
+
+    def test_create_guest_account(self):
+        user = User.create_guest_account()
+        self.assertEqual(user.username, 'ゲスト')

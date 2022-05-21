@@ -53,7 +53,7 @@ export default {
     },
     guestLogin(event) {
       event.preventDefault()
-      this.$axios.post('/api/v1/guest_login/')
+      this.$axios.post('/api/v1/auth/guest_login/')
       .then((response) => {
         this.$store.commit('authentication/setAuthData', response.data)
         this.$router.push('/languages')
