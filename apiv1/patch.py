@@ -1,4 +1,5 @@
 import djoser
+from drf_spectacular.utils import extend_schema
 
 
 class CustomTokenSerializer(djoser.serializers.TokenSerializer):
@@ -8,6 +9,16 @@ class CustomTokenSerializer(djoser.serializers.TokenSerializer):
         fields = ("auth_token", "user")
 
 
+@extend_schema(
+    description="ログイン用のエンドポイントです。\
+        デフォルトのdjoserのログインエンドポイントとレスポンスが変わっているため注意してください。",
+    responses={201: CustomTokenSerializer}
+)
+class CustomTokenCreateView(djoser.views.TokenCreateView):
+    pass
+
+
 # パッチを適用するメソッドを定義
 def patch_djoser_endpoints():
     djoser.serializers.TokenSerializer = CustomTokenSerializer
+    djoser.views.TokenCreateView = CustomTokenCreateView
