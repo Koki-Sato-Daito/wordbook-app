@@ -9,7 +9,7 @@ class WordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Word
         fields = ['id', 'wordname', 'meaning', 'pos',
-                  'language', 'freq', 'users']
+                  'language', 'freq']
 
 
 class UserMistakeSerializer(serializers.ModelSerializer):

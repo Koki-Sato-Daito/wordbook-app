@@ -1,29 +1,17 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from django_filters import rest_framework as filters
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from wordbook.models import Word
 from apiv1.serializers.words_serializers import UserMistakeSerializer
 from apiv1.permissions import OwnerPermission
 
 
 """"TODO
-WordFilterをviewsから移動
 MistakeWordAPIViewのエンドポイントを再考
 APIドキュメントの生成
 """
-
-class WordFilter(filters.FilterSet):
-    language = filters.CharFilter(field_name='language')
-    pos = filters.CharFilter(field_name='pos')
-    users = filters.UUIDFilter(field_name='user')
-
-    class Meta:
-        model = Word
-        fields = ['pos', 'language', 'users']
 
 
 class MistakeWordAPIView(generics.GenericAPIView):

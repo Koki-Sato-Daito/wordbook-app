@@ -5,7 +5,7 @@ import djoser.urls.base as djoser_base
 import djoser.urls.authtoken as djoser_token
 
 from apiv1.views.accounts_views import GuestLoginAPIView
-from apiv1.views.app_views import InitWordbookPageAPIView
+from apiv1.views.page_views import ExamPageAPIView
 from apiv1.views.progress_views import ProgressViewSet
 from apiv1.views.words_view import MistakeWordAPIView
 from apiv1.views.not_found_views import NotFoundAPIView
@@ -30,7 +30,7 @@ urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
     path('users/<uuid:user_id>/mistake/', MistakeWordAPIView.as_view()),
 
-    path('init_wordbook_page/', InitWordbookPageAPIView.as_view()),
+    path('exam_page_data/', ExamPageAPIView.as_view()),
     path('progress/', include(progress_router.urls)),
     re_path(r'', NotFoundAPIView.as_view()) 
 ]

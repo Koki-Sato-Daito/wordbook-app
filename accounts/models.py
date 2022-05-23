@@ -80,6 +80,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_superuser(self):
         return self.is_staff
 
+    # TODO ユニットテストを追加
+    @classmethod
+    def get_user_by_pk_str(cls, str_pk):
+        return cls.objects.get(pk=uuid.UUID(str_pk))
+
     @classmethod
     def create_guest_account(cls):
         now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')

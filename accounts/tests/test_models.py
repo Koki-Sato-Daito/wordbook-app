@@ -4,15 +4,17 @@ from django.test import TestCase
 
 
 class UserModelTests(TestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_user('ユーザ1', 'user@example.com', 'password')
+        return super().setUp()
+
     def test_can_create_a_user_accurately(self):
-        User.objects.create_user('testuser01', 'test@example.com', 'password')
-        user = User.objects.get()
+        user = User.objects.create_user('testuser01', 'test@example.com', 'password')
         self.assertEqual('testuser01', user.username)
         self.assertFalse(user.is_staff)
 
     def test_can_create_a_superuser_accurately(self):
-        User.objects.create_superuser('testuser01', 'test@example.com', 'password')
-        user = User.objects.get()
+        user = User.objects.create_superuser('testuser01', 'test@example.com', 'password')
         self.assertEqual('testuser01', user.username)
         self.assertTrue(user.is_staff)
 
@@ -40,3 +42,7 @@ class UserModelTests(TestCase):
     def test_create_guest_account(self):
         user = User.create_guest_account()
         self.assertEqual(user.username, 'ゲスト')
+
+    def test_get_user_by_pk_str(self):
+        user_pk_str = str(self.user.pk)
+        self.assertTrue(User.get_user_by_pk_str(user_pk_str), self.user)

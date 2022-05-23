@@ -44,7 +44,7 @@ export default {
       mistake: true
     }
     this.$axios
-      .get('api/v1/init_wordbook_page/', {
+      .get('api/v1/exam_page_data/', {
         params: q,
         headers: {
           Authorization: 'Token ' + this.authToken,

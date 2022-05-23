@@ -20,14 +20,6 @@ class TestWordSerializer(APITestCase):
             instance=Word.objects.all(), many=True)
         self.assertEqual(len(serializer.data), self.FIXTIRED_WORD_LENGTH)
 
-    def test_serialize_users_data(self):
-        for i in range(1, 3):
-            get_user_model().objects.get(
-                username=f'test{i}').mistake_words.add(1)
-        serializer = WordSerializer(
-            instance=Word.objects.get(pk=1))
-        self.assertEqual(len(serializer.data['users']), 2)
-
 
 class TestUserMistakeSerializer(APITestCase):
     fixtures = ['users.json', 'words.json']

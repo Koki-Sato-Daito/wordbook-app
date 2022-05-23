@@ -6,9 +6,9 @@ from rest_framework.test import APITestCase
 from progress.models import Progress
 
 
-class TestInitWordbookPageAPIView(APITestCase):
+class TestExamPageAPIView(APITestCase):
     fixtures = ['users.json', 'words.json']
-    TARGET_URL = '/api/v1/init_wordbook_page/'
+    TARGET_URL = '/api/v1/exam_page_data/'
     user = None
 
     @classmethod
@@ -35,7 +35,6 @@ class TestInitWordbookPageAPIView(APITestCase):
             self.TARGET_URL + '?language=java&pos=noun&mistake=false&user=' + str(self.user.id))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
-        # print(data)
         self.assertEqual(len(data['words']), 3)
         self.assertEqual(data['progress']['index'], 100)
         self.assertEqual(data['progress']['correctAnswerCounter'], 10)
