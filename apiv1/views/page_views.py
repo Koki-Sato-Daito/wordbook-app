@@ -1,12 +1,13 @@
 import uuid
 
 from django.contrib.auth import get_user_model
-from accounts.models import User
-
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from accounts.models import User
 from wordbook.models import Word
 from progress.models import Progress
 from apiv1.serializers.page_serializers import ExamPageSerializer, ExamPageData
@@ -14,8 +15,7 @@ from apiv1.serializers.page_serializers import ExamPageSerializer, ExamPageData
 
 User = get_user_model()
 
-# TODO 
-# ドキュメント生成処理の追加
+
 class ExamPageAPIView(generics.GenericAPIView):
     """
     試験画面で必要な単語データと、
@@ -25,6 +25,14 @@ class ExamPageAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ExamPageSerializer
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter('language', OpenApiTypes.STR, OpenApiParameter.QUERY),
+            OpenApiParameter('pos', OpenApiTypes.STR, OpenApiParameter.QUERY),
+            OpenApiParameter('user', OpenApiTypes.UUID, OpenApiParameter.QUERY),
+            OpenApiParameter('mistake', OpenApiTypes.BOOL, OpenApiParameter.QUERY),
+        ]
+    )
     def get(self, request):
         queryset_dict = self.get_queryset_dict()
         filtered_queryset_dict = self.filter_queryset_dict(**queryset_dict)
