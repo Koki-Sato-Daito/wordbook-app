@@ -6,11 +6,19 @@ from apiv1.serializers.progress_serializers import ProgressSerializer
 
 
 class ExamPageSerializer(serializers.Serializer):
+    """試験ページのマスタデータをシリアライズするクラスです。
+    デシリアライズ(リクエスト時などの辞書->クエリーセットオブジェクトへの変換)には対応していません。
+
+    Word, Progressのどちらかをデシリアライズをするケースは各々のエンドポイントで行います。
+    """
     words = WordSerializer(many=True)
     progress = ProgressSerializer()
 
 
 class ExamPageData:
+    """WordのクエリーセットとProgressのクエリーセットをシリアライズするときに
+    シリアライザに渡すオブジェクトを生成します。
+    """
     words = None
     progress = None
 
