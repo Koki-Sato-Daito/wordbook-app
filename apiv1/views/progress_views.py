@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
@@ -6,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from progress.models import Progress
 from apiv1.serializers.progress_serializers import ProgressSerializer
-from apiv1.permissions import OwnerPermission
+from apiv1.authorization import get_user_by_authtoken
 
 
 class ProgressViewSet(mixins.CreateModelMixin,
@@ -17,28 +16,24 @@ class ProgressViewSet(mixins.CreateModelMixin,
     """
     queryset = Progress.objects.all()
     serializer_class = ProgressSerializer
-
-    """OwnerPermissionでリクエストしたユーザと、リクエストボディのユーザが同値かをチェックする。
-    ProgressSerializerに(リクエストボディに)ユーザのパラメータが必要な理由は、
-    Progressモデルの複合ユニーク制約による例外ではなく、ProgressSerializerのvalidateメソッドの例外として
-    クライアント側にメッセージを送ったほうがわかりやすいためである。
-    このとき、ログイン済みユーザが他のユーザとして進捗データをリクエストできないようにする。"""
-    permission_classes = [IsAuthenticated, OwnerPermission]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        """ユーザの試験の進捗データをサーバに保存するエンドポイントです。
+        """ユーザの試験の進捗データをサーバに保存するエンドポイントです。\n
+        必ずauthrizationヘッダに認証トークンを入れてリクエストしてください。
         """
-        user = get_user_model().objects.get(id=request.data['user'])
-        self.check_object_permissions(request, user)
-        return super().create(request, *args, **kwargs)
+        user = get_user_by_authtoken(request)
+        serializer = self.serializer_class(data=request.data, context={'user': user})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request,  pk, *args, **kwargs):
-        """ユーザの試験の進捗データを削除するエンドポイントです。
-        新たに試験の進捗データを保存したい場合は一度削除してからPOSTリクエストを送ってください。
+        """ユーザの試験の進捗データを削除するエンドポイントです。\n
+        新たに試験の進捗データを保存したい場合は一度削除してからPOSTリクエストを送ってください。\n
+        必ずauthrizationヘッダに認証トークンを入れてリクエストしてください。
         """
         instance = Progress.objects.get(pk=pk)
-        user = instance.user
-        self.check_object_permissions(request, user)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
