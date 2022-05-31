@@ -7,7 +7,7 @@ import djoser.urls.authtoken as djoser_token
 from apiv1.views.accounts_views import GuestLoginAPIView
 from apiv1.views.page_views import ExamPageAPIView
 from apiv1.views.progress_views import ProgressViewSet
-from apiv1.views.words_view import MistakeWordAPIView
+from apiv1.views.words_view import CorrectWordsAPIView, MistakeWordsAPIView
 from apiv1.views.not_found_views import NotFoundAPIView
 
 from .patch import patch_djoser_endpoints
@@ -28,9 +28,11 @@ app_name = 'apiv1'
 urlpatterns = [
     path('', include('djoser.urls.base')),
     path('auth/', include('djoser.urls.authtoken')),
-    path('users/<uuid:user_id>/mistake/', MistakeWordAPIView.as_view()),
 
     path('exam_page_data/', ExamPageAPIView.as_view()),
     path('progress/', include(progress_router.urls)),
+    path('mistake_words/',  MistakeWordsAPIView.as_view()),
+    path('correct_words/',  CorrectWordsAPIView.as_view()),
+
     re_path(r'', NotFoundAPIView.as_view()) 
 ]
