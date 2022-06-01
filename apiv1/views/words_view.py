@@ -8,11 +8,6 @@ from apiv1.serializers.words_serializers import CorrectWordsSerializer, MistakeW
 from apiv1.authorization import get_user_by_authtoken
 
 
-"""TODO
-APIドキュメントの生成
-クライアント側のAPIコール処理を修正
-"""
-
 class MistakeWordsAPIView(mixins.CreateModelMixin,
                                         mixins.DestroyModelMixin,
                                         generics.GenericAPIView):

@@ -1,7 +1,8 @@
 from django.urls import path, include, re_path
 from rest_framework import routers
+
+# patchを適用するためにインポート
 import djoser
-import djoser.urls.base as djoser_base
 import djoser.urls.authtoken as djoser_token
 
 from apiv1.views.accounts_views import GuestLoginAPIView

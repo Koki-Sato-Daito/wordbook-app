@@ -1,16 +1,13 @@
-import uuid
-
 from django.contrib.auth import get_user_model
-from apiv1.authorization import get_user_by_authtoken
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from accounts.models import User
 from wordbook.models import Word
 from progress.models import Progress
+from apiv1.authorization import get_user_by_authtoken
 from apiv1.serializers.page_serializers import ExamPageSerializer, ExamPageData
 
 
