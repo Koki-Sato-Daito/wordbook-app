@@ -40,7 +40,6 @@ export default {
     const q = {
       language: this.language,
       pos: this.pos,
-      user: this.user.id,
       mistake: true
     }
     this.$axios
@@ -77,10 +76,10 @@ export default {
     },
     saveCorrectWords() {
       const data = {
-        mistakes: this.correctWords,
+        correctWords: this.correctWords,
       }
       this.$axios
-        .patch(`/api/v1/users/${this.user.id}/mistake/`, JSON.stringify(data), {
+        .post(`/api/v1/correct_words/`, JSON.stringify(data), {
           headers: {
             Authorization: 'Token ' + this.authToken,
           },

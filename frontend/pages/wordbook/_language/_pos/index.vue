@@ -67,7 +67,7 @@ export default {
     const q = {
       language: this.language,
       pos: this.pos,
-      user: this.user.id,
+      mistake: false
     }
     this.$axios
       .get('api/v1/exam_page_data/', {
@@ -108,10 +108,10 @@ export default {
     },
     saveMistakenWords() {
       const data = {
-        mistakes: this.mistakenWords,
+        mistakeWords: this.mistakenWords,
       }
       this.$axios
-        .post(`/api/v1/users/${this.user.id}/mistake/`, JSON.stringify(data), {
+        .post(`/api/v1/mistake_words/`, JSON.stringify(data), {
           headers: {
             Authorization: 'Token ' + this.authToken,
           },
