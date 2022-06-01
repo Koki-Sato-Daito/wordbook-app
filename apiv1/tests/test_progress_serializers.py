@@ -77,3 +77,19 @@ class TestProgressSerializer(APITestCase):
         serializer = ProgressSerializer(data=data, context={'user': self.user})
         with self.assertRaises(ValidationError):
             serializer.is_valid(raise_exception=True)
+
+    # createメソッドに対するテスト
+    def test_create_method_can_add_record(self):
+        data = {
+            'language': 'python',
+            'pos': 'noun',
+            'mistake': False,
+            'index': 100,
+            'correct_answer_counter': 10
+        }
+        serializer = ProgressSerializer(data=data, context={'user': self.user})
+        serializer.is_valid()
+        serializer.save()
+
+        progress = Progress.objects.get(language='python', pos='noun')
+        self.assertEqual(progress.user, self.user)

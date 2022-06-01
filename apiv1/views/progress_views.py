@@ -23,7 +23,7 @@ class ProgressViewSet(mixins.CreateModelMixin,
         必ずauthrizationヘッダに認証トークンを入れてリクエストしてください。
         """
         user = get_user_by_authtoken(request)
-        serializer = self.serializer_class(data=request.data, context={'user': user})
+        serializer = self.get_serializer(data=request.data, context={'user': user})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)

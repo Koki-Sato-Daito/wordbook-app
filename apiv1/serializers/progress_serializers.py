@@ -6,7 +6,7 @@ from progress.models import Progress
 
 class ProgressSerializer(serializers.ModelSerializer):
     """
-    ユーザが試験を中断した際の進捗データについて以下の債務を持ちます。\n
+    ユーザが試験を中断した際の進捗データについて以下の責務を持ちます。\n
     モデルマネージャのcreate, deleteメソッドを隠蔽させてserializerから簡単にsaveできるようにする。\n
     バリデーションでユニーク制約を守る、ユーザに通知するメッセージの定義。\n
     Prgressモデルをシリアライズ、デシリアライズできる。\n
@@ -42,4 +42,4 @@ class ProgressSerializer(serializers.ModelSerializer):
         return validated_data
 
     def create(self, validated_data):
-        return Progress(user=self.context['user'], **validated_data)
+        return Progress.objects.create(user=self.context['user'], **validated_data)
