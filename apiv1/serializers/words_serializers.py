@@ -25,7 +25,7 @@ class MistakeWordsSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ('id', 'mistake_words')
+        fields = ('mistake_words',)
         write_only_fields = ('mistake_words',)
 
     def create(self, validated_data):
@@ -44,7 +44,7 @@ class CorrectWordsSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ('id', 'correct_words')
+        fields = ('correct_words',)
 
     correct_words = serializers.PrimaryKeyRelatedField(
         queryset=Word.objects.all(),

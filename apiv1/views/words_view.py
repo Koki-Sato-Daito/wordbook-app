@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import status, mixins, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -20,6 +20,9 @@ class MistakeWordsAPIView(mixins.CreateModelMixin,
     permission_classes = [IsAuthenticated]
     serializer_class = MistakeWordsSerializer
 
+    @extend_schema(
+        responses={201: MistakeWordsSerializer}
+    )
     def post(self, request, *args, **kwargs):
         """間違えた問題を記録するエンドポイントです。\n
         必ずAuthenticationヘッダに認証トークンをつけてリクエストします。\n
@@ -45,10 +48,12 @@ class CorrectWordsAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CorrectWordsSerializer
 
+    @extend_schema(
+        responses={201: CorrectWordsSerializer}
+    )
     def post(self, request, *args, **kwargs):
-        """復習ページにて正解した問題を記録するエンドポイントです。\n
-        間違った問題は復習ページで一度正解するとリストから削除されます。\n
-        必ずAuthenticationヘッダに認証トークンをつけてリクエストします。\n
+        """復習ページにて正解した問題を記録するエンドポイントです。間違った問題は復習ページで一度正解するとリストから削除されます。\n
+        必ずAuthenticationヘッダに認証トークンをつけてリクエストしてください。\n
         リクエストボディのリストには正解した単語のIDが入ります。
         """
         user = get_user_by_authtoken(request)
